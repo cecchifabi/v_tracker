@@ -1,6 +1,6 @@
 # v_tracker
 
-A new Flutter project.
+Flutter project for the first assignment of the Mobile Computing class.
 
 ## Getting Started
 
