@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
@@ -21,6 +22,7 @@ class Infected extends StatefulWidget {
 class _InfectedState extends State<Infected> {
 
   String status = "";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final LocalAuthentication auth = LocalAuthentication();
 
   @override
@@ -133,6 +135,13 @@ class _InfectedState extends State<Infected> {
                   MaterialPageRoute(builder: (context) => InfoCOVID19(title: 'COVID-19 info', address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
                 );
               },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Sign Out'),
+              onTap: () async {
+                await _auth.signOut();
+              }, //onTap
             ),
             Divider(
               height: 4.0,

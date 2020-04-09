@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:v_tracker/home_page.dart';
 import 'package:v_tracker/info_covid19.dart';
@@ -13,6 +14,9 @@ class InfoVTracker extends StatefulWidget {
 }
 
 class _InfoVTrackerState extends State<InfoVTracker> {
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +56,13 @@ class _InfoVTrackerState extends State<InfoVTracker> {
                   MaterialPageRoute(builder: (context) => InfoCOVID19(title: 'COVID-19 info', address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
                 );
               },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Sign Out'),
+              onTap: () async {
+                await _auth.signOut();
+              }, //onTap
             ),
             Divider(
               height: 4.0,
