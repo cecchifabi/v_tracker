@@ -103,6 +103,23 @@ class _HomePageState extends State<HomePage> {
             zoom: 18
             )));
           updateMarkerAndCircle(newLocalData, imageData);
+
+          /*
+          * PUT HERE THE CODE NEEDED WHEN A CHANGE OF LOCATION IS DETECTED
+          * newLocalData is the new location. It has the following arìttributes:
+          *   final double latitude; // Latitude, in degrees
+          *   final double longitude; // Longitude, in degrees
+          *   final double accuracy; // Estimated horizontal accuracy of this location, radial, in meters
+          *   final double altitude; // In meters above the WGS 84 reference ellipsoid
+          *   final double speed; // In meters/second
+          *   final double speedAccuracy; // In meters/second, always 0 on iOS
+          *   final double heading; //Heading is the horizontal direction of travel of this device, in degrees
+          *   final double time; //timestamp
+          */
+          
+          print("\n\n\nLocation changed!!!");
+          print("New location: ${newLocalData.latitude}, ${newLocalData.longitude}, ${newLocalData.time}\n\n\n");
+          // Could use speed to decide wether to store the position more frequently?
         }
       });
 
