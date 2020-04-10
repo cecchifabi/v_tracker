@@ -74,10 +74,11 @@ class _RegisterState extends State<Register> {
                     if(_formKey.currentState.validate()){
                       setState(() => loading = true);
                       dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                      print(result);
                       if(result == null) {
                       setState(() {
                         loading = false;
-                        error = 'Could register with those credentials';
+                        error = 'Could not register with those credentials';
                       });
                       }
                     }

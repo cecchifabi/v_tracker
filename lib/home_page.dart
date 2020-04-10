@@ -9,8 +9,14 @@ import 'package:v_tracker/infected.dart';
 import 'package:v_tracker/info_covid19.dart';
 import 'package:v_tracker/info_v_tracker.dart';
 import 'package:provider/provider.dart';
-import 'authenticate/authenticate.dart';
-import 'models/user.dart';
+import 'package:v_tracker/services/auth.dart';
+import 'package:v_tracker/services/database.dart';
+import 'package:v_tracker/authenticate/authenticate.dart';
+import 'package:v_tracker/models/user.dart';
+import 'package:v_tracker/models/user_list.dart';
+import 'package:v_tracker/models/UserInfo.dart';
+
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -24,6 +30,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Needed for Maps
@@ -119,7 +126,11 @@ class _HomePageState extends State<HomePage> {
   // This method is rerun every time setState is called
   @override
   Widget build(BuildContext context) {
+
     final user = Provider.of<User>(context);
+    final userList = Provider.of<List<UserData>>(context);
+
+    //Timer.periodic(Duration(seconds:1), (Timer t) => print("xd" + DateTime.now().toString()));
 
     //check user
     if (user == null)
@@ -127,89 +138,107 @@ class _HomePageState extends State<HomePage> {
       return Authenticate();
     }
     else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          centerTitle: true,
-        ),
-        drawer: Drawer(
-          // Set the children for the drawer.
-          child: ListView(
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.home),
-                title: Text('Home'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(title: 'V Tracker')),
-                  );
-                },
+      return StreamProvider<List<UserData>>.value(
+        value: DatabaseService().users,
+        child: StreamProvider<User>.value(
+          value: AuthService().user,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              centerTitle: true,
+            ),
+            drawer: Drawer(
+              // Set the children for the drawer.
+              child: ListView(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.home),
+                    title: Text('Home'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage(title: 'V Tracker')),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.report_problem),
+                    title: Text('Report an infection'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            Infected(title: 'Report an infection')),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.announcement),
+                    title: Text('COVID-19'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            InfoCOVID19(title: 'COVID-19 info',
+                                address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
+                      );
+                    },
+                  ),
+                  ListTile(
+                      leading: Icon(Icons.list),
+                      title: Text('User Info'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              UserList(),
+                          ),
+                        );
+                      },
+                    ),
+                  ListTile(
+                    leading: Icon(Icons.person),
+                    title: Text('Sign Out'),
+                    onTap: () async {
+                      await _auth.signOut();
+                    }, //onTap
+                  ),
+                  Divider(
+                    height: 4.0,
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.info_outline),
+                    title: Text('Info on this App'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            InfoVTracker(title: 'V Tracker info')),
+                      );
+                    },
+                  ),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.report_problem),
-                title: Text('Report an infection'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        Infected(title: 'Report an infection')),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.announcement),
-                title: Text('COVID-19'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        InfoCOVID19(title: 'COVID-19 info',
-                            address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.person),
-                title: Text('Sign Out'),
-                onTap: () async {
-                  await _auth.signOut();
-                }, //onTap
-              ),
-              Divider(
-                height: 4.0,
-              ),
-              ListTile(
-                leading: Icon(Icons.info_outline),
-                title: Text('Info on this App'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        InfoVTracker(title: 'V Tracker info')),
-                  );
-                },
-              ),
-            ],
+            ),
+            body: GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _initialPosition,
+            //markers:  Set<Marker>.of(markers.values),
+            markers: Set.of((marker != null) ? [marker] : []),
+            circles: Set.of((circle != null) ? [circle] : []),
+            onMapCreated: (GoogleMapController controller) {
+              _controller = controller;
+            },
           ),
-        ),
-        body: GoogleMap(
-          mapType: MapType.hybrid,
-          initialCameraPosition: _initialPosition,
-          //markers:  Set<Marker>.of(markers.values),
-          markers: Set.of((marker != null) ? [marker] : []),
-          circles: Set.of((circle != null) ? [circle] : []),
-          onMapCreated: (GoogleMapController controller) {
-            _controller = controller;
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _getLocation();
-          },
-          tooltip: 'Get Location',
-          child: Icon(Icons.my_location),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                _getLocation();
+              },
+              tooltip: 'Get Location',
+              child: Icon(Icons.my_location),
+            ),
+          ),
         ),
       );
     }

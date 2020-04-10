@@ -2,15 +2,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:v_tracker/home_page.dart';
 import 'package:v_tracker/info_covid19.dart';
 import 'package:v_tracker/info_v_tracker.dart';
 import 'package:v_tracker/filesystem.dart';
 import 'package:local_auth/local_auth.dart';
+import 'authenticate/authenticate.dart';
+import 'models/user.dart';
 
 class Infected extends StatefulWidget {
   Infected({Key key, this.title}) : super(key: key);
+
 
   final String title;
   final CounterStorage storage = CounterStorage();
@@ -98,103 +102,118 @@ class _InfectedState extends State<Infected> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      drawer: Drawer(
-        child: ListView(
+
+    final user = Provider.of<User>(context);
+
+    //check user
+    if (user == null)
+    {
+      return Authenticate();
+    }
+    else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          centerTitle: true,
+        ),
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.home),
+                title: Text('Home'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(title: 'V Tracker')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.report_problem),
+                title: Text('Report an infection'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        Infected(title: 'Report an infection')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.announcement),
+                title: Text('COVID-19'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        InfoCOVID19(title: 'COVID-19 info',
+                            address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.person),
+                title: Text('Sign Out'),
+                onTap: () async {
+                  await _auth.signOut();
+                }, //onTap
+              ),
+              Divider(
+                height: 4.0,
+              ),
+              ListTile(
+                leading: Icon(Icons.info_outline),
+                title: Text('Info on this App'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        InfoVTracker(title: 'V Tracker info')),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+        body: ListView(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage(title: 'V Tracker')),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.report_problem),
-              title: Text('Report an infection'),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Infected(title: 'Report an infection')),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.announcement),
-              title: Text('COVID-19'),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InfoCOVID19(title: 'COVID-19 info', address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Sign Out'),
-              onTap: () async {
-                await _auth.signOut();
-              }, //onTap
-            ),
-            Divider(
-              height: 4.0,
-            ),
-            ListTile(
               leading: Icon(Icons.info_outline),
-              title: Text('Info on this App'),
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InfoVTracker(title: 'V Tracker info')),
-                );
-              },
+              title: Text('COVID-19 symptoms'),
+            ),
+            ListTile(
+              leading: Icon(Icons.looks_one),
+              title: Text('Cough'),
+            ),
+            ListTile(
+              leading: Icon(Icons.looks_two),
+              title: Text('Fever'),
+            ),
+            ListTile(
+              leading: Icon(Icons.looks_3),
+              title: Text('Tiredness'),
+            ),
+            ListTile(
+              leading: Icon(Icons.looks_4),
+              title: Text('Difficulty breathing (severe cases)'),
+            ),
+            ListTile(
+              leading: Icon(Icons.arrow_right),
+              title: Text(status),
             ),
           ],
         ),
-      ),
-      body: ListView(
-        children: <Widget>[
-          ListTile(
-            leading: Icon(Icons.info_outline),
-            title: Text('COVID-19 symptoms'),
-          ),
-          ListTile(
-            leading: Icon(Icons.looks_one),
-            title: Text('Cough'),
-          ),
-          ListTile(
-            leading: Icon(Icons.looks_two),
-            title: Text('Fever'),
-          ),
-          ListTile(
-            leading: Icon(Icons.looks_3),
-            title: Text('Tiredness'),
-          ),
-          ListTile(
-            leading: Icon(Icons.looks_4),
-            title: Text('Difficulty breathing (severe cases)'),
-          ),
-          ListTile(
-            leading: Icon(Icons.arrow_right),
-            title: Text(status),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          _scanQR();
-        },
-        tooltip: 'Scan QR code',
-        icon: Icon(Icons.settings_overscan),
-        label: Text('Change your status'),
-      ),
-    );
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            _scanQR();
+          },
+          tooltip: 'Scan QR code',
+          icon: Icon(Icons.settings_overscan),
+          label: Text('Change your status'),
+        ),
+      );
+    }
   }
 }
