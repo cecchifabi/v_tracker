@@ -8,6 +8,7 @@ import 'package:v_tracker/info_v_tracker.dart';
 
 import 'authenticate/authenticate.dart';
 import 'models/user.dart';
+import 'user_list.dart';
 
 class InfoCOVID19 extends StatefulWidget {
   InfoCOVID19({Key key, this.title, this.address}) : super(key: key);
@@ -73,6 +74,18 @@ class _InfoCOVID19State extends State<InfoCOVID19> {
                     MaterialPageRoute(builder: (context) =>
                         InfoCOVID19(title: 'COVID-19 info',
                             address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.list),
+                title: Text('User Tracker Info'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        UserList(),
+                    ),
                   );
                 },
               ),

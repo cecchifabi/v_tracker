@@ -8,15 +8,26 @@ class UserData{
   bool isInfected;
   List<Position> listOfPositions;
 
-  UserData({ this.uid, this.firstName, this.lastName, this.isInfected, this.listOfPositions});
-
+  UserData ({this.uid, this.firstName, this.lastName, this.isInfected, this.listOfPositions});
 }
 
 class Position{
 
   String timestamp;
-  LatLng position;
+  double latitude;
+  double longitude;
 
-  Position({this.timestamp, this.position});
+  Position({this.timestamp, this.latitude, this.longitude});
 
+  Position.fromJson(Map<String, dynamic> json)
+    :  timestamp = json['timestamp'],
+       latitude = json['latitude'],
+       longitude = json['longitude'];
+
+  Map<String, dynamic> toJson() =>
+      {
+        'timestamp': timestamp,
+        'latitude': latitude,
+        'longitude': longitude
+      };
 }

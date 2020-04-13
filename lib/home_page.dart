@@ -13,7 +13,7 @@ import 'package:v_tracker/services/auth.dart';
 import 'package:v_tracker/services/database.dart';
 import 'package:v_tracker/authenticate/authenticate.dart';
 import 'package:v_tracker/models/user.dart';
-import 'package:v_tracker/models/user_list.dart';
+import 'package:v_tracker/user_list.dart';
 import 'package:v_tracker/models/UserInfo.dart';
 
 
@@ -81,6 +81,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _getLocation() async {
+
+    final user = Provider.of<User>(context);
+    final userList = Provider.of<List<UserData>>(context);
+
     try{
 
       Uint8List imageData = await getMarker();
@@ -116,7 +120,20 @@ class _HomePageState extends State<HomePage> {
           *   final double heading; //Heading is the horizontal direction of travel of this device, in degrees
           *   final double time; //timestamp
           */
-          
+
+          // Update user's database with the new location
+          UserData currUser;
+          for (int i = 0; i < userList.length; i++){
+            if (user.uid.toString() == userList[i].uid.toString()){
+           currUser = userList[i];
+           }
+          }
+          Position tmpPos = new Position(timestamp: DateTime.now().toString(), latitude: newLocalData.latitude, longitude: newLocalData.longitude);
+
+          currUser.listOfPositions.add(tmpPos);
+
+          DatabaseService().updateUserData(currUser.uid, currUser.firstName, currUser.lastName, currUser.isInfected, currUser.listOfPositions);
+
           print("\n\n\nLocation changed!!!");
           print("New location: ${newLocalData.latitude}, ${newLocalData.longitude}, ${newLocalData.time}\n\n\n");
           // Could use speed to decide wether to store the position more frequently?
@@ -147,6 +164,8 @@ class _HomePageState extends State<HomePage> {
     final user = Provider.of<User>(context);
     final userList = Provider.of<List<UserData>>(context);
 
+
+
     //Timer.periodic(Duration(seconds:1), (Timer t) => print("xd" + DateTime.now().toString()));
 
     //check user
@@ -156,108 +175,108 @@ class _HomePageState extends State<HomePage> {
     }
     else {
       return StreamProvider<List<UserData>>.value(
-        value: DatabaseService().users,
-        child: StreamProvider<User>.value(
-          value: AuthService().user,
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              centerTitle: true,
-            ),
-            drawer: Drawer(
-              // Set the children for the drawer.
-              child: ListView(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.home),
-                    title: Text('Home'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePage(title: 'V Tracker')),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.report_problem),
-                    title: Text('Report an infection'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            Infected(title: 'Report an infection')),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.announcement),
-                    title: Text('COVID-19'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            InfoCOVID19(title: 'COVID-19 info',
-                                address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
-                      );
-                    },
-                  ),
-                  ListTile(
-                      leading: Icon(Icons.list),
-                      title: Text('User Info'),
+          value: DatabaseService().users,
+          child: StreamProvider<User>.value(
+            value: AuthService().user,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(widget.title),
+                centerTitle: true,
+              ),
+              drawer: Drawer(
+                // Set the children for the drawer.
+                child: ListView(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.home),
+                      title: Text('Home'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage(title: 'V Tracker')),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.report_problem),
+                      title: Text('Report an infection'),
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
-                              UserList(),
-                          ),
+                              Infected(title: 'Report an infection')),
                         );
                       },
                     ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Sign Out'),
-                    onTap: () async {
-                      await _auth.signOut();
-                    }, //onTap
-                  ),
-                  Divider(
-                    height: 4.0,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info_outline),
-                    title: Text('Info on this App'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            InfoVTracker(title: 'V Tracker info')),
-                      );
-                    },
-                  ),
-                ],
+                    ListTile(
+                      leading: Icon(Icons.announcement),
+                      title: Text('COVID-19'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              InfoCOVID19(title: 'COVID-19 info',
+                                  address: 'WebView of the address https://www.worldometers.info/coronavirus/')),
+                        );
+                      },
+                    ),
+                    ListTile(
+                        leading: Icon(Icons.list),
+                        title: Text('User Tracker Info'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                UserList(),
+                            ),
+                          );
+                        },
+                      ),
+                    ListTile(
+                      leading: Icon(Icons.person),
+                      title: Text('Sign Out'),
+                      onTap: () async {
+                        await _auth.signOut();
+                      }, //onTap
+                    ),
+                    Divider(
+                      height: 4.0,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.info_outline),
+                      title: Text('Info on this App'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) =>
+                              InfoVTracker(title: 'V Tracker info')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              body: GoogleMap(
+              mapType: MapType.hybrid,
+              initialCameraPosition: _initialPosition,
+              //markers:  Set<Marker>.of(markers.values),
+              markers: Set.of((marker != null) ? [marker] : []),
+              circles: Set.of((circle != null) ? [circle] : []),
+              onMapCreated: (GoogleMapController controller) {
+                _controller = controller;
+              },
+            ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  _getLocation();
+                },
+                tooltip: 'Get Location',
+                child: Icon(Icons.my_location),
               ),
             ),
-            body: GoogleMap(
-            mapType: MapType.hybrid,
-            initialCameraPosition: _initialPosition,
-            //markers:  Set<Marker>.of(markers.values),
-            markers: Set.of((marker != null) ? [marker] : []),
-            circles: Set.of((circle != null) ? [circle] : []),
-            onMapCreated: (GoogleMapController controller) {
-              _controller = controller;
-            },
           ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                _getLocation();
-              },
-              tooltip: 'Get Location',
-              child: Icon(Icons.my_location),
-            ),
-          ),
-        ),
-      );
+        );
     }
   }
 }
