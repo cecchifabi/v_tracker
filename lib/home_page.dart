@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   static final CameraPosition _initialPosition = CameraPosition(
 
     target: LatLng(0, 0),
-    zoom: 14
+    zoom: 18
 
   );
 
@@ -95,17 +95,20 @@ class _HomePageState extends State<HomePage> {
       var location = await _locationTracker.getLocation();
       updateMarkerAndCircle(location, imageData);
 
+      if(_controller != null) {
+        _controller.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+          bearing: 192.8334901395799,
+          target: LatLng(location.latitude, location.longitude),
+          tilt: 0,
+          zoom: 18
+        )));
+      }
+
       if(_locationSubscription != null) {
         _locationSubscription.cancel();
       }
       _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
         if(_controller != null) {
-          _controller.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-            bearing: 192.8334901395799,
-            target: LatLng(newLocalData.latitude, newLocalData.longitude),
-            tilt: 0,
-            zoom: 18
-            )));
           updateMarkerAndCircle(newLocalData, imageData);
 
           /*
@@ -136,7 +139,6 @@ class _HomePageState extends State<HomePage> {
 
           print("\n\n\nLocation changed!!!");
           print("New location: ${newLocalData.latitude}, ${newLocalData.longitude}, ${newLocalData.time}\n\n\n");
-          // Could use speed to decide wether to store the position more frequently?
         }
       });
 
