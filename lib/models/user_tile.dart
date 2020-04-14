@@ -9,14 +9,14 @@ class UserTile extends StatefulWidget {
   final Position position;
 
   @override
-  _UserTileState createState() => _UserTileState();
+  UserTileState createState() => UserTileState();
 }
 
-class _UserTileState extends State<UserTile> {
+class UserTileState extends State<UserTile> {
 
   String _subtitle = "";
 
-  Future<String> _getAddress(double lat, double long) async {
+  Future<String> getAddress(double lat, double long) async {
 
     List<GEO.Placemark> placemarks = await GEO.Geolocator()
         .placemarkFromCoordinates(lat, long);
@@ -33,7 +33,7 @@ class _UserTileState extends State<UserTile> {
 
   @override
     Widget build(BuildContext context) {
-      _getAddress(widget.position.latitude,widget.position.longitude);
+      getAddress(widget.position.latitude,widget.position.longitude);
       return Padding(
           padding: EdgeInsets.only(top: 8.0),
           child: Card(

@@ -12,6 +12,9 @@ import 'package:local_auth/local_auth.dart';
 import 'authenticate/authenticate.dart';
 import 'models/user.dart';
 import 'user_list.dart';
+import'services/database.dart';
+import 'models/UserInfo.dart';
+import 'models/user_tile.dart';
 
 class Infected extends StatefulWidget {
   Infected({Key key, this.title}) : super(key: key);
@@ -33,16 +36,118 @@ class _InfectedState extends State<Infected> {
   @override
   void initState() {
     super.initState();
-    widget.storage.read().then((String str) {
-      setState(() {
-        this.status = "Status: " + str;
-      });
-    });
+
   }
+
+
+
+  _changeStatus(bool status){
+
+
+    final user = Provider.of<User>(context);
+    final userList = Provider.of<List<UserData>>(context);
+
+
+
+    try{
+          UserData currUser;
+          for (int i = 0; i < userList.length; i++){
+            if (user.uid.toString() == userList[i].uid.toString()){
+              currUser = userList[i];
+            }
+          }
+          DatabaseService().updateUserData(currUser.uid, currUser.firstName, currUser.lastName, status, currUser.listOfPositions);
+          print("\n\nUser changed his status to infected = " + status.toString());
+          setState(() {
+            this.status = status.toString();
+          });
+
+
+    } catch(e) {
+
+      print('Exception: $e');
+
+    }
+
+
+
+
+  }
+
+  showAlertDialog(BuildContext context, bool infected) async {
+    Widget infectedB;
+    Widget cancelB;
+    AlertDialog alert;
+
+    //CHANGE TO INFECTED STATUS
+    if(infected){
+      infectedB = FlatButton(
+        child: Text("Ok"),
+        onPressed: (){
+          Navigator.pop(context);
+          _changeStatus(true);
+        },
+      );
+
+      cancelB = FlatButton(
+        child: Text("Cancel"),
+        onPressed:  () {
+          Navigator.pop(context);
+
+        },
+      );
+      // set up the AlertDialog
+      alert = AlertDialog(
+        title: Text("Warning: changing status to infected!"),
+        content: Text("Your QR code says that you are INFECTED! \nClick ok to confirm the change"),
+        actions: [
+          infectedB,
+          cancelB,
+        ],
+      );
+    }
+
+    //CHANGE TO NOT INFECTED
+    else{infectedB = FlatButton(
+        child: Text("Ok"),
+        onPressed: (){
+          Navigator.pop(context);
+          _changeStatus(true);
+        },
+      );
+
+      cancelB = FlatButton(
+        child: Text("Cancel"),
+        onPressed:  () {
+          Navigator.pop(context);
+
+        },
+      );
+      // set up the AlertDialog
+      alert = AlertDialog(
+        title: Text("Warning: changing status to healthy!"),
+        content: Text("Your QR code says that you are NOT INFECTED! \nClick ok to confirm the change"),
+        actions: [
+          infectedB,
+          cancelB,
+        ],
+    );
+
+    }
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+
+  }
+
 
   Future _scanQR() async {
     // https://pub.dev/packages/barcode_scan
-
+    /*
     print('####################################################');
 
     bool canCheckBiometrics = await auth.canCheckBiometrics;
@@ -54,24 +159,27 @@ class _InfectedState extends State<Infected> {
         useErrorDialogs: true,
         stickyAuth: true,
         );
+      if(didAuthenticate)
+        showAlertDialog(context);
+
       print('Autenticated: $didAuthenticate');
     } catch(e) {
       print('Exception: $e');
     }
 
     print('####################################################');
-
+    //QR CODE ------------------------------------------------
+      */
     try {
 
       String barcode = await BarcodeScanner.scan();
 
-      if(barcode == 'INFECTED' || barcode == 'RECOVERED' || barcode == 'HEALTHY') {
+      if(barcode == 'INFECTED' ) {}
+        showAlertDialog(context, true);
 
-        // Save the information on a file
-        widget.storage.write(barcode);
+      if(  barcode == 'HEALTHY') {
+        showAlertDialog(context, false);
 
-        setState(() => this.status = "Status: " + barcode);
-      
       }
       else {
 
@@ -105,13 +213,30 @@ class _InfectedState extends State<Infected> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User>(context);
+    final userList = Provider.of<List<UserData>>(context);
+
 
     //check user
     if (user == null)
     {
       return Authenticate();
     }
+
     else {
+      //GET INITIAL STATUS OF USER
+      UserData currUser;
+      //widget.storage.read().then((String str) {
+
+      for (int i = 0; i < userList.length; i++) {
+        if (user.uid.toString() == userList[i].uid.toString()) {
+          currUser = userList[i];
+        }
+      }
+      setState(() {
+        this.status = currUser.isInfected.toString();
+      });
+
+
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
@@ -170,6 +295,7 @@ class _InfectedState extends State<Infected> {
                 leading: Icon(Icons.person),
                 title: Text('Sign Out'),
                 onTap: () async {
+
                   await _auth.signOut();
                 }, //onTap
               ),
@@ -214,13 +340,14 @@ class _InfectedState extends State<Infected> {
             ),
             ListTile(
               leading: Icon(Icons.arrow_right),
-              title: Text(status),
+              title: Text("Infected: " + status.toUpperCase() ),
             ),
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             _scanQR();
+
           },
           tooltip: 'Scan QR code',
           icon: Icon(Icons.settings_overscan),

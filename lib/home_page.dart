@@ -16,9 +16,9 @@ import 'package:v_tracker/authenticate/authenticate.dart';
 import 'package:v_tracker/models/user.dart';
 import 'package:v_tracker/user_list.dart';
 import 'package:v_tracker/models/UserInfo.dart';
-
+import 'services/database.dart';
 import 'models/UserInfo.dart';
-
+import 'models/user_tile.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -62,6 +62,7 @@ class _HomePageState extends State<HomePage> {
 
     List<LatLng> infected = new List<LatLng>();
     List<String> infectedTime = new List<String>();
+    List<String> infectedAddress = new List<String>();
     final user = Provider.of<User>(context);
     final userList = Provider.of<List<UserData>>(context);
 
@@ -89,8 +90,9 @@ class _HomePageState extends State<HomePage> {
             zIndex: -1,
 
             infoWindow: InfoWindow(
+
               title: infectedTime[i].split(" ")[0],
-              snippet: infectedTime[i].split(" ")[1].split(".")[0]
+              //snippet: infectedTime[i].split(" ")[1].split(".")[0]
             ),
             flat: true,
             anchor: Offset(0.5, 0.5),
