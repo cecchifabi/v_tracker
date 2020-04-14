@@ -24,8 +24,8 @@ void callback() async {
       
      //print(DB.DatabaseService().test());
 
-      var _position = await geoLocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      print("\n\nLat: ${_position.latitude}, Lon: ${_position.longitude}, Time: ${_position.timestamp}");
+      //var _position = await geoLocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+     // print("\n\nLat: ${_position.latitude}, Lon: ${_position.longitude}, Time: ${_position.timestamp}");
 
       // Update user's database with the new location
       

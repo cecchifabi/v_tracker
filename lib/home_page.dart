@@ -18,7 +18,8 @@ import 'package:v_tracker/user_list.dart';
 import 'package:v_tracker/models/UserInfo.dart';
 import 'services/database.dart';
 import 'models/UserInfo.dart';
-import 'models/user_tile.dart';
+import 'package:sensors/sensors.dart';
+import 'dart:math';
 
 
 class HomePage extends StatefulWidget {
@@ -43,6 +44,12 @@ class _HomePageState extends State<HomePage> {
   Marker marker;
   Set<Marker> markers = new Set<Marker>();
   Circle circle;
+
+  // For movement checking
+  double xOld = 0, xCurr = 0;
+  double yOld = 0, yCurr = 0;
+  double zOld = 0, zCurr = 0;
+  double magnitude = 0;
 
   static final CameraPosition _initialPosition = CameraPosition(
 
@@ -186,21 +193,44 @@ class _HomePageState extends State<HomePage> {
           *   final double time; //timestamp
           */
 
-          // Update user's database with the new location
-          UserData currUser;
-          for (int i = 0; i < userList.length; i++){
-            if (user.uid.toString() == userList[i].uid.toString()){
-           currUser = userList[i];
-           }
+          // Update user's database with the new location only if the device is moving
+          accelerometerEvents.listen((AccelerometerEvent event) {
+
+            magnitude = sqrt(pow(event.x, 2) + pow(event.y, 2) + pow(event.z, 2));
+            xCurr = event.x;
+            yCurr = event.y;
+            zCurr = event.z;
+
+          });
+
+          print('Magnitude out: ' + magnitude.toString());
+          print('xCurr: ' + xCurr.toString());
+          print('yCurr: ' + yCurr.toString());
+          print('zCurr: ' + zCurr.toString());
+
+          if(magnitude > 10) {
+
+            UserData currUser;
+            for (int i = 0; i < userList.length; i++){
+              if (user.uid.toString() == userList[i].uid.toString()){
+                currUser = userList[i];
+                break;
+              }
+            }
+            Position tmpPos = new Position(timestamp: DateTime.now().toString(), latitude: newLocalData.latitude, longitude: newLocalData.longitude);
+
+            currUser.listOfPositions.add(tmpPos);
+
+            DatabaseService().updateUserData(currUser.uid, currUser.firstName, currUser.lastName, currUser.isInfected, currUser.listOfPositions);
+
+            print('\n\n\nLocation sent!!!');
+
           }
-          Position tmpPos = new Position(timestamp: DateTime.now().toString(), latitude: newLocalData.latitude, longitude: newLocalData.longitude);
+          else {
 
-          currUser.listOfPositions.add(tmpPos);
-
-          DatabaseService().updateUserData(currUser.uid, currUser.firstName, currUser.lastName, currUser.isInfected, currUser.listOfPositions);
-
-          print("\n\n\nLocation changed!!!");
-          print("New location: ${newLocalData.latitude}, ${newLocalData.longitude}, ${newLocalData.time}\n\n\n");
+            print("\n\n\nLocation changed, but magnitude was not great enough!!!");
+            
+          }
         }
       });
 

@@ -108,11 +108,12 @@ class _InfectedState extends State<Infected> {
     }
 
     //CHANGE TO NOT INFECTED
-    else{infectedB = FlatButton(
+    else if(!infected)
+      {infectedB = FlatButton(
         child: Text("Ok"),
         onPressed: (){
           Navigator.pop(context);
-          _changeStatus(true);
+          _changeStatus(false);
         },
       );
 
@@ -174,10 +175,10 @@ class _InfectedState extends State<Infected> {
 
       String barcode = await BarcodeScanner.scan();
 
-      if(barcode == 'INFECTED' ) {}
+      if(barcode == 'INFECTED' ) {
         showAlertDialog(context, true);
-
-      if(  barcode == 'HEALTHY') {
+      }
+       else if(  barcode == 'HEALTHY') {
         showAlertDialog(context, false);
 
       }
@@ -230,6 +231,7 @@ class _InfectedState extends State<Infected> {
       for (int i = 0; i < userList.length; i++) {
         if (user.uid.toString() == userList[i].uid.toString()) {
           currUser = userList[i];
+          break;
         }
       }
       setState(() {

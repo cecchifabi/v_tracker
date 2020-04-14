@@ -37,12 +37,19 @@ class _UserListState extends State<UserList> {
     else {
       // Get user's current listOfPositions
       UserData display;
+      List<Position> rdisplay = new List<Position>();
       for (int i = 0; i < userList.length; i++){
         if (user.uid.toString() == userList[i].uid.toString()){
           display = userList[i];
+          break;
         }
       }
-    print(display.listOfPositions.length);
+      //REVERSE POSITIONS TO SEE LAST ONE FIRST
+     for(int i =display.listOfPositions.length-1; i>=0 ;i--){
+       rdisplay.add(display.listOfPositions[i]);
+     }
+
+    //print(display.listOfPositions.length);
 
   return StreamProvider<List<UserData>>.value(
     value: DatabaseService().users,
@@ -130,7 +137,7 @@ class _UserListState extends State<UserList> {
         body: ListView.builder(
             itemCount: display.listOfPositions.length,
             itemBuilder: (context, index) {
-              return UserTile(position: display.listOfPositions[index]);
+              return UserTile(position: rdisplay[index]);
             }
         ),
       ),
