@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:v_tracker/models/UserInfo.dart';
@@ -10,6 +9,11 @@ class DatabaseService{
 
   // collection reference
   final CollectionReference userCollection = Firestore.instance.collection('users');
+
+  String test(){
+    return "\nNaiuli\n";
+  }
+
 
   Future updateUserData(String uid, String firstName, String lastName, bool isInfected, List<Position> listOfPositions) async {
     List<String> tmp = new List<String>();

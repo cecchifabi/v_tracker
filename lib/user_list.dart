@@ -27,22 +27,22 @@ class _UserListState extends State<UserList> {
 
 
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final userList = Provider.of<List<UserData>>(context);
-  final user = Provider.of<User>(context);
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    final userList = Provider.of<List<UserData>>(context);
+    final user = Provider.of<User>(context);
 
-if (user == null){
-  return Authenticate();
-}
-else {
-  // Get user's current listOfPositions
-  UserData display;
-  for (int i = 0; i < userList.length; i++){
-    if (user.uid.toString() == userList[i].uid.toString()){
-      display = userList[i];
+    if (user == null){
+      return Authenticate();
     }
-  }
-  print(display.listOfPositions.length);
+    else {
+      // Get user's current listOfPositions
+      UserData display;
+      for (int i = 0; i < userList.length; i++){
+        if (user.uid.toString() == userList[i].uid.toString()){
+          display = userList[i];
+        }
+      }
+    print(display.listOfPositions.length);
 
   return StreamProvider<List<UserData>>.value(
     value: DatabaseService().users,

@@ -7,6 +7,7 @@ import 'package:v_tracker/services/database.dart';
 import 'package:v_tracker/models/user.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:geolocator/geolocator.dart';
+import 'services/database.dart' as DB;
 
 void callback() async {
 
@@ -20,6 +21,8 @@ void callback() async {
    */
 
     try {
+      
+     //print(DB.DatabaseService().test());
 
       var _position = await geoLocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
       print("\n\nLat: ${_position.latitude}, Lon: ${_position.longitude}, Time: ${_position.timestamp}");

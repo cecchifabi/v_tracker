@@ -1,3 +1,4 @@
+//import 'dart:html';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -15,6 +16,8 @@ import 'package:v_tracker/authenticate/authenticate.dart';
 import 'package:v_tracker/models/user.dart';
 import 'package:v_tracker/user_list.dart';
 import 'package:v_tracker/models/UserInfo.dart';
+
+import 'models/UserInfo.dart';
 
 
 
@@ -38,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   GoogleMapController _controller;
   Location _locationTracker = Location();
   Marker marker;
+  Set<Marker> markers = new Set<Marker>();
   Circle circle;
 
   static final CameraPosition _initialPosition = CameraPosition(
@@ -47,19 +51,67 @@ class _HomePageState extends State<HomePage> {
 
   );
 
-  Future<Uint8List> getMarker() async {
+  Future<Uint8List> getMarker(String image) async {
 
-    ByteData byteData = await DefaultAssetBundle.of(context).load("assets/smile.png");
+    ByteData byteData = await DefaultAssetBundle.of(context).load(image);
     return byteData.buffer.asUint8List();
 
-  }
 
-  void updateMarkerAndCircle(LocationData newLocalData, Uint8List imageData) {
+  }
+  void showInfected() async{
+
+    List<LatLng> infected = new List<LatLng>();
+    List<String> infectedTime = new List<String>();
+    final user = Provider.of<User>(context);
+    final userList = Provider.of<List<UserData>>(context);
+
+    for (int i = 0; i < userList.length; i++){
+      if ( user.uid.toString() != userList[i].uid.toString() && userList[i].isInfected){
+
+
+        //if the date is 4 days or more less older it gets added to show to user that an infected person was in that place
+        if( DateTime.now().difference(DateTime.parse(userList[i].listOfPositions.last.timestamp )).inDays <= 4)
+
+          infected.add( LatLng(userList[i].listOfPositions.last.latitude , (userList[i].listOfPositions.last.longitude) ));
+          infectedTime.add(userList[i].listOfPositions.last.timestamp);
+      }
+    }
+   Uint8List icon = await getMarker("assets/virus_red.png");
+
+    for (int i = 0; i < infected.length; i++){
+
+    //add infected markers
+      this.setState(() {
+        marker = Marker(
+            markerId: MarkerId("Infected"+i.toString()),
+            position: infected[i],
+            draggable: false,
+            zIndex: -1,
+
+            infoWindow: InfoWindow(
+              title: infectedTime[i].split(" ")[0],
+              snippet: infectedTime[i].split(" ")[1].split(".")[0]
+            ),
+            flat: true,
+            anchor: Offset(0.5, 0.5),
+            icon: BitmapDescriptor.fromBytes(icon));
+      });
+      markers.add(marker);
+
+    }
+  print("\n");
+  }
+ /* void showInfo(Marker marker){
+    marker.showInfoWindow();
+    marker.infoWindow.
+  }*/
+
+  void updateMarkerAndCircle(String markerID, bool circleMarker, LocationData newLocalData, Uint8List imageData) {
 
     LatLng latlng = LatLng(newLocalData.latitude, newLocalData.longitude);
     this.setState(() {
       marker = Marker(
-        markerId: MarkerId('Home'),
+        markerId: MarkerId(markerID),
         position: latlng,
         rotation: newLocalData.heading,
         draggable: false,
@@ -68,32 +120,40 @@ class _HomePageState extends State<HomePage> {
         anchor: Offset(0.5, 0.5),
         icon: BitmapDescriptor.fromBytes(imageData)
       );
-      circle = Circle(
-        circleId: CircleId('Person'),
-        radius: newLocalData.accuracy,
-        zIndex: 1,
-        strokeColor: Colors.blue,
-        center: latlng,
-        fillColor: Colors.blue.withAlpha(70)
-      );
+      if(circleMarker) {
+        circle = Circle(
+            circleId: CircleId(markerID),
+            radius: newLocalData.accuracy,
+            zIndex: 1,
+            strokeWidth: 0,
+            center: latlng,
+            fillColor: Colors.white.withAlpha(150)
+        );
+      }
+      markers.add(marker);
     });
 
   }
 
   void _getLocation() async {
 
+
+
+
     final user = Provider.of<User>(context);
     final userList = Provider.of<List<UserData>>(context);
 
+
+
     try{
 
-      Uint8List imageData = await getMarker();
+      Uint8List imageData = await getMarker("assets/user_red.png");
 
       // Check if have permissions
       //bool _serviceEnabled = await local.serviceEnabled();
 
       var location = await _locationTracker.getLocation();
-      updateMarkerAndCircle(location, imageData);
+      updateMarkerAndCircle("Home", true,location, imageData);
 
       if(_controller != null) {
         _controller.animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
@@ -109,7 +169,7 @@ class _HomePageState extends State<HomePage> {
       }
       _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
         if(_controller != null) {
-          updateMarkerAndCircle(newLocalData, imageData);
+          updateMarkerAndCircle("Home", true, newLocalData, imageData);
 
           /*
           * PUT HERE THE CODE NEEDED WHEN A CHANGE OF LOCATION IS DETECTED
@@ -147,7 +207,13 @@ class _HomePageState extends State<HomePage> {
       print('Exception: $e');
 
     }
+
+
+    showInfected();
+
   }
+
+
 
   @override
   void dispose() {
@@ -263,7 +329,8 @@ class _HomePageState extends State<HomePage> {
               mapType: MapType.hybrid,
               initialCameraPosition: _initialPosition,
               //markers:  Set<Marker>.of(markers.values),
-              markers: Set.of((marker != null) ? [marker] : []),
+              markers: markers,
+              //Set.of((marker != null) ? [marker] : []),
               circles: Set.of((circle != null) ? [circle] : []),
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
