@@ -111,17 +111,70 @@ class _InfoVTrackerState extends State<InfoVTracker> {
             ],
           ),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Lorem ipsum',
-              ),
-            ],
+        body:Column(
+          children: [Container(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: Center(
+                  child: Text(
+                    'App made for subject Computação Móvel',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  )
+              )
           ),
-        ),
-      );
+            Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Center(
+                    child: Text(
+                      'Engenharia de Computadores e Telemática',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+
+                )
+            ),
+            Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Center(
+                    child: Text(
+                      'Universidade de Aveiro',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                )
+            ),
+            Container(
+                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                child: Center(
+                    child: Text(
+                      'Students List',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                )
+            ),
+            Container(
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: Center(
+                    child: Text(
+                      'Tiago Feitor\t 85134\nRui Silva\t85135\nFabio Cecchinato\t100720',
+                      style: TextStyle(fontSize: 14),
+                    )
+                )
+            ),
+            Container(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                     child: Text(
+                        'This app saves the locations where the user went by and stores it in the database.\n'
+                            'If at any point the user gets infected, he/she can change its status and the current list of positions'
+                            ' will be displayed on the map, with the locations and timestamps, so everyone else knows what places are safe to go.\n'
+                            'A user can at any point change its status with the use of the correct QR Code (one to set the state to infected and'
+                            ' another one to set the state to not infected.',
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(fontSize: 14),
+                      )
+                 )
+              ],
+          ),
+        );
     }
   }
 }
