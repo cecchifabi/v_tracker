@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   static final CameraPosition _initialPosition = CameraPosition(
 
     target: LatLng(0, 0),
-    zoom: 18
+    zoom: 1
 
   );
 
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
           infectedTime.add(userList[i].listOfPositions.last.timestamp);
       }
     }
-   Uint8List icon = await getMarker("assets/virus_red.png");
+   Uint8List icon = await getMarker("assets/virus_1.png");
 
     for (int i = 0; i < infected.length; i++){
 
@@ -92,14 +92,13 @@ class _HomePageState extends State<HomePage> {
       this.setState(() {
         marker = Marker(
             markerId: MarkerId("Infected"+i.toString()),
-            position: infected[i],
-            draggable: false,
-            zIndex: -1,
+              position: infected[i],
+              draggable: false,
+              zIndex: -1,
 
-            infoWindow: InfoWindow(
-
-              title: infectedTime[i].split(" ")[0],
-              //snippet: infectedTime[i].split(" ")[1].split(".")[0]
+              infoWindow: InfoWindow(
+                title: infectedTime[i].split(" ")[0],
+                //snippet: infectedTime[i].split(" ")[1].split(".")[0]
             ),
             flat: true,
             anchor: Offset(0.5, 0.5),
@@ -156,7 +155,8 @@ class _HomePageState extends State<HomePage> {
 
     try{
 
-      Uint8List imageData = await getMarker("assets/user_red.png");
+
+      Uint8List imageData = await getMarker("assets/user_red_2.png");
 
       // Check if have permissions
       //bool _serviceEnabled = await local.serviceEnabled();
@@ -358,6 +358,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               body: GoogleMap(
+
               mapType: MapType.hybrid,
               initialCameraPosition: _initialPosition,
               //markers:  Set<Marker>.of(markers.values),
@@ -366,6 +367,7 @@ class _HomePageState extends State<HomePage> {
               circles: Set.of((circle != null) ? [circle] : []),
               onMapCreated: (GoogleMapController controller) {
                 _controller = controller;
+
               },
             ),
               floatingActionButton: FloatingActionButton(
