@@ -14,13 +14,15 @@ import 'models/user.dart';
 import 'user_list.dart';
 import'services/database.dart';
 import 'models/UserInfo.dart';
-import 'models/user_tile.dart';
 
+/// The user can see and change its health status,
+/// and see the symptoms of the virus.
 class Infected extends StatefulWidget {
   Infected({Key key, this.title}) : super(key: key);
 
-
+  /// Title of the page.
   final String title;
+  /// Reference to the filesystem, to store local data.
   final CounterStorage storage = CounterStorage();
 
   @override

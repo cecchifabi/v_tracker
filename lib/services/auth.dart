@@ -3,6 +3,7 @@ import 'package:v_tracker/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:v_tracker/services/database.dart';
 
+/// Provides the suthentication services for the users.
 class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -12,7 +13,7 @@ class AuthService{
   return user != null ? User(uid: user.uid) : null;
   }
 
-  // auth change user stream
+  /// auth change user stream
   Stream<User> get user{
     return _auth.onAuthStateChanged
     .map((FirebaseUser user) => _userFromFirebaseUser(user));

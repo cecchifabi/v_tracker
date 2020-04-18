@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:v_tracker/authenticate/authenticate.dart';
 import 'package:v_tracker/models/user.dart';
@@ -10,12 +7,12 @@ import 'package:v_tracker/models/UserInfo.dart';
 import 'package:v_tracker/models/user_tile.dart';
 import 'package:v_tracker/services/auth.dart';
 import 'package:v_tracker/services/database.dart';
-
 import 'home_page.dart';
 import 'infected.dart';
 import 'info_covid19.dart';
 import 'info_v_tracker.dart';
 
+/// List with the last potitions of the user.
 class UserList extends StatefulWidget {
   @override
   _UserListState createState() => _UserListState();

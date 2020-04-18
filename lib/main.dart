@@ -6,14 +6,17 @@ import 'package:v_tracker/services/auth.dart';
 import 'package:v_tracker/services/database.dart';
 import 'package:v_tracker/models/user.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:geolocator/geolocator.dart';
-import 'services/database.dart' as DB;
+/*import 'package:geolocator/geolocator.dart';*/
 
+/*
+/// Get the current location
+/// 
+/// It runs in a different isolate, that should be active even in background
 void callback() async {
 
   print("\n\nRunning in background (in another isolate)!");
 
-  Geolocator geoLocator = Geolocator();//..forceAndroidLocationManager = true;
+  Geolocator geoLocator = Geolocator();
 
   /* Get the current location:
    * have to use GeoLocator because Location doesn't work here,
@@ -40,21 +43,22 @@ void callback() async {
     }
     
 }
+*/
 
 void main() async {
 
-  WidgetsFlutterBinding.ensureInitialized();
+  /*WidgetsFlutterBinding.ensureInitialized();*/
 
   runApp(App());
 
-  await AndroidAlarmManager.initialize();
-  await AndroidAlarmManager.periodic(const Duration(seconds: 10), 0, callback);
+  /*await AndroidAlarmManager.initialize();
+  await AndroidAlarmManager.periodic(const Duration(seconds: 10), 0, callback);*/
 
 }
 
 class App extends StatelessWidget{
 
-   // This widget is the root of the application.
+  // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
     return StreamProvider<List<UserData>>.value(

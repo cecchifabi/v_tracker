@@ -5,15 +5,17 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:v_tracker/home_page.dart';
 import 'package:v_tracker/infected.dart';
 import 'package:v_tracker/info_v_tracker.dart';
-
 import 'authenticate/authenticate.dart';
 import 'models/user.dart';
 import 'user_list.dart';
 
+/// Webview with info about the pandemic.
 class InfoCOVID19 extends StatefulWidget {
   InfoCOVID19({Key key, this.title, this.address}) : super(key: key);
 
+  /// Title of the page.
   final String title;
+  /// Address of the webpage.
   final String address;
 
   @override

@@ -1,4 +1,3 @@
-//import 'dart:html';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -21,12 +20,15 @@ import 'models/UserInfo.dart';
 import 'package:sensors/sensors.dart';
 import 'dart:math';
 
-
+/// Home page of the application.
+/// 
+/// Shows the map with the markers for the position
+/// of the current user and for the positions of
+/// the infected users.
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
 
-  // This (stateful) widget is the home page of the application.
-
+  /// Title of the page.
   final String title;
 
   @override
@@ -35,22 +37,33 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  /// Authorisation for FireBase.
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Needed for Maps
+  /// Needed for Maps.
   StreamSubscription _locationSubscription;
+  /// Needed for Maps.
   GoogleMapController _controller;
+
+  /// Tracker for the current location.
   Location _locationTracker = Location();
+
+  /// Marker for the current user.
   Marker marker;
-  Set<Marker> markers = new Set<Marker>();
+
+  /// Circle for the current user, for the precision of the location.
   Circle circle;
 
-  // For movement checking
+  /// Markers for the infected users.
+  Set<Marker> markers = new Set<Marker>();
+
+  /// For movement checking.
   double xOld = 0, xCurr = 0;
   double yOld = 0, yCurr = 0;
   double zOld = 0, zCurr = 0;
   double magnitude = 0;
 
+  /// Initial position of the camera
   static final CameraPosition _initialPosition = CameraPosition(
 
     target: LatLng(0, 0),
@@ -58,37 +71,38 @@ class _HomePageState extends State<HomePage> {
 
   );
 
+  /// Gets the marker from an image.
   Future<Uint8List> getMarker(String image) async {
 
     ByteData byteData = await DefaultAssetBundle.of(context).load(image);
     return byteData.buffer.asUint8List();
 
-
   }
+
+  /// Show the markers for the infected users, for the last 4 days.
   void showInfected() async{
 
     List<LatLng> infected = new List<LatLng>();
     List<String> infectedTime = new List<String>();
-    List<String> infectedAddress = new List<String>();
+
     final user = Provider.of<User>(context);
     final userList = Provider.of<List<UserData>>(context);
 
     for (int i = 0; i < userList.length; i++){
       if ( user.uid.toString() != userList[i].uid.toString() && userList[i].isInfected){
-
-
-        //if the date is 4 days or more less older it gets added to show to user that an infected person was in that place
+        // If the date is 4 days or more less older it gets added to show to user that an infected person was in that place
         if( DateTime.now().difference(DateTime.parse(userList[i].listOfPositions.last.timestamp )).inDays <= 4)
 
           infected.add( LatLng(userList[i].listOfPositions.last.latitude , (userList[i].listOfPositions.last.longitude) ));
           infectedTime.add(userList[i].listOfPositions.last.timestamp);
       }
     }
+
    Uint8List icon = await getMarker("assets/virus_1.png");
 
     for (int i = 0; i < infected.length; i++){
 
-    //add infected markers
+      // Add infected markers
       this.setState(() {
         marker = Marker(
             markerId: MarkerId("Infected"+i.toString()),
@@ -107,12 +121,14 @@ class _HomePageState extends State<HomePage> {
       markers.add(marker);
 
     }
-  print("\n");
+
+    print("\n");
   }
- /* void showInfo(Marker marker){
-    marker.showInfoWindow();
-    marker.infoWindow.
-  }*/
+  /*  void showInfo(Marker marker){
+      marker.showInfoWindow();
+      marker.infoWindow.
+    }*/
+
 
   void updateMarkerAndCircle(String markerID, bool circleMarker, LocationData newLocalData, Uint8List imageData) {
 
@@ -179,19 +195,6 @@ class _HomePageState extends State<HomePage> {
       _locationSubscription = _locationTracker.onLocationChanged.listen((newLocalData) {
         if(_controller != null) {
           updateMarkerAndCircle("Home", true, newLocalData, imageData);
-
-          /*
-          * PUT HERE THE CODE NEEDED WHEN A CHANGE OF LOCATION IS DETECTED
-          * newLocalData is the new location. It has the following arìttributes:
-          *   final double latitude; // Latitude, in degrees
-          *   final double longitude; // Longitude, in degrees
-          *   final double accuracy; // Estimated horizontal accuracy of this location, radial, in meters
-          *   final double altitude; // In meters above the WGS 84 reference ellipsoid
-          *   final double speed; // In meters/second
-          *   final double speedAccuracy; // In meters/second, always 0 on iOS
-          *   final double heading; //Heading is the horizontal direction of travel of this device, in degrees
-          *   final double time; //timestamp
-          */
 
           // Update user's database with the new location only if the device is moving
           accelerometerEvents.listen((AccelerometerEvent event) {
@@ -262,7 +265,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<User>(context);
-    final userList = Provider.of<List<UserData>>(context);
+    //final userList = Provider.of<List<UserData>>(context);
 
 
 

@@ -4,14 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:v_tracker/home_page.dart';
 import 'package:v_tracker/info_covid19.dart';
 import 'package:v_tracker/infected.dart';
-
 import 'authenticate/authenticate.dart';
 import 'models/user.dart';
 import 'user_list.dart';
 
+/// Info about the app.
 class InfoVTracker extends StatefulWidget {
   InfoVTracker({Key key, this.title}) : super(key: key);
 
+  /// Title of the page
   final String title;
 
   @override

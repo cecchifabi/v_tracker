@@ -1,4 +1,4 @@
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+//import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class UserData{
 
@@ -11,10 +11,14 @@ class UserData{
   UserData ({this.uid, this.firstName, this.lastName, this.isInfected, this.listOfPositions});
 }
 
+/// Encodes the position for a user.
 class Position{
 
+  /// Timestamp.
   String timestamp;
+  /// Latitude.
   double latitude;
+  /// Longitude.
   double longitude;
 
   Position({this.timestamp, this.latitude, this.longitude});
@@ -24,6 +28,7 @@ class Position{
        latitude = json['latitude'],
        longitude = json['longitude'];
 
+  /// Converts the Position object in a Json format.
   Map<String, dynamic> toJson() =>
       {
         'timestamp': timestamp,
