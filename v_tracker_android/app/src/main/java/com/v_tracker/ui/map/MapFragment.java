@@ -17,6 +17,8 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.v_tracker.R;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -28,6 +30,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_map, container, false);
+
+        FloatingActionButton fab = mView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
         return mView;
     }
 
@@ -47,7 +59,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
 
         myMap = map;
-        CameraPosition initPos = CameraPosition.builder().target(new LatLng(41, -9)).zoom(10).bearing(0).tilt(90).build();
+        CameraPosition initPos = CameraPosition.builder().target(
+                new LatLng(0, 0)).zoom(3).bearing(0).tilt(90).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(initPos));
+        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
     }
 }

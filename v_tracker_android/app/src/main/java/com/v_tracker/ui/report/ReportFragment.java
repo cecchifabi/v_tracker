@@ -1,6 +1,7 @@
 package com.v_tracker.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,8 @@ public class ReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_covid, container, false);
+        Log.i("Message", "I'm in REPORT");
+        View root = inflater.inflate(R.layout.fragment_report, container, false);
         final TextView textView = root.findViewById(R.id.text_report);
         textView.setText("Report");
         return root;
