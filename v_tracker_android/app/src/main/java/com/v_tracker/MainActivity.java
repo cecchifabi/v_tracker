@@ -1,6 +1,8 @@
 package com.v_tracker;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 
@@ -8,6 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -51,5 +54,40 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    /*@Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        Log.i("V_TRACKER_INFO", "Fragment destroyed: starting foreground service");
+        startService();
+    }*/
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        Log.i("V_TRACKER_INFO", "Fragment stopped: starting foreground service");
+        startService();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.i("V_TRACKER_INFO", "Fragment resumed: stopping foreground service");
+        stopService();
+    }
+
+    public void startService() {
+        Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+        serviceIntent.putExtra("inputExtra", "V Tracker is getting the device location in background");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+        stopService(serviceIntent);
     }
 }

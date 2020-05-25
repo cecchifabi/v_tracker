@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service
-            android:name=".ui.map.MyLocationService"/>
+            android:name=".LocationForegroundService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="location"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

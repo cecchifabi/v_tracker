@@ -1,14 +1,21 @@
 package com.v_tracker.ui.map;
 
+// https://androidwave.com/foreground-service-android-example/
+
 import android.Manifest;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,8 +49,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.v_tracker.LocationForegroundService;
 import com.v_tracker.MainActivity;
 import com.v_tracker.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -52,12 +62,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private View mView;
     private Marker userLocation;
     private Circle userCircle;
+    private float currentZoomLevel;
 
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
-    private boolean requestingLocationUpdates;
     private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -83,13 +92,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 // Got last known location. In some rare situations this can be null.
                                 currentLocation = location;
                                 if (currentLocation != null) {
+                                    currentZoomLevel = 19;
                                     // Logic to handle location object
-                                    Log.i("Updated location", "(" + currentLocation.getLatitude() +
+                                    Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() +
                                             ", " + currentLocation.getLongitude() + ")");
-                                    updateMapPosition(19);
+                                    updateMapPosition();
 
                                     // Prepare the location request to access the position from now on
-                                    requestingLocationUpdates = true;
                                     locationRequest = LocationRequest.create()
                                             .setInterval(10000)
                                             .setFastestInterval(1000)
@@ -97,7 +106,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     requestLocationUpdates();
                                 }
                                 else {
-                                    Log.i("Updated location", "null");
+                                    Log.i("V_TRACKER_INFO", "currentLocation = null");
                                 }
                             }
                         });
@@ -114,21 +123,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 super.onLocationResult(locationResult);
 
                 currentLocation = locationResult.getLastLocation();
-                Log.i("Updated location", "(" + currentLocation.getLatitude() + ", " +
+                Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() + ", " +
                         currentLocation.getLongitude() + ")");
-
-                updateMapPosition(19);
             }
         }, Looper.getMainLooper());
     }
 
-    public void updateMapPosition(int zoom) {
-        CameraPosition newPos = CameraPosition.builder()
-                .target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
-                .zoom(zoom)
-                .bearing(0)
-                .tilt(0)
-                .build();
+    public void updateMapPosition() {
+        CameraPosition newPos = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+                    .bearing(0)
+                    .zoom(currentZoomLevel)
+                    .tilt(0)
+                    .build();
+
         myMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPos));
 
         if(userLocation != null) {
@@ -174,19 +181,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 new LatLng(0, 0)).zoom(3).bearing(0).tilt(90).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(initPos));
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (requestingLocationUpdates) {
-            startLocationUpdates();
-        }
-    }
-
-    private void startLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(locationRequest,
-                locationCallback,
-                Looper.getMainLooper());
     }
 }
