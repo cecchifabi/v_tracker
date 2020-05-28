@@ -11,6 +11,12 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.TriggerEvent;
+import android.hardware.TriggerEventListener;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,6 +26,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +64,9 @@ import org.greenrobot.eventbus.EventBus;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    private final String V_TRACKER_INFO = "V_TRACKER_INFO";
+
+    // Map
     private GoogleMap myMap;
     private MapView mapView;
     private View mView;
@@ -64,9 +74,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Circle userCircle;
     private float currentZoomLevel;
 
+    // Location
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
     private LocationRequest locationRequest;
+
+    // Motion detection
+    private float xCurr, yCurr, zCurr, magnitude;
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private SensorEventListener sensorEventListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            magnitude = (float) Math.sqrt(Math.pow(event.values[0], 2) + Math.pow(event.values[1], 2) + Math.pow(event.values[2], 2));
+            xCurr = event.values[0];
+            yCurr = event.values[1];
+            zCurr = event.values[2];
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+        }
+    };
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -77,13 +107,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean coarseLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
+                boolean fineLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
+                boolean backgroundLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
 
-                if (ContextCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (coarseLocationDenied || fineLocationDenied || backgroundLocationDenied) {
                     // Ask the user to allow location access
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
                 }
+
 
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
@@ -94,22 +129,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 if (currentLocation != null) {
                                     currentZoomLevel = 19;
                                     // Logic to handle location object
-                                    Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() +
+                                    Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() +
                                             ", " + currentLocation.getLongitude() + ")");
                                     updateMapPosition();
-
-                                    // Prepare the location request to access the position from now on
-                                    locationRequest = LocationRequest.create()
-                                            .setInterval(10000)
-                                            .setFastestInterval(1000)
-                                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                                    requestLocationUpdates();
                                 }
                                 else {
-                                    Log.i("V_TRACKER_INFO", "currentLocation = null");
+                                    Log.i(V_TRACKER_INFO, "currentLocation = null");
                                 }
                             }
                         });
+
+                // Prepare the location request to access the position from now on
+                locationRequest = LocationRequest.create()
+                        .setInterval(10000)
+                        .setFastestInterval(1000)
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                requestLocationUpdates();
+
+                xCurr = 0;
+                yCurr = 0;
+                zCurr = 0;
+                magnitude = 0;
+                sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
             }
         });
 
@@ -122,9 +165,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onLocationResult(LocationResult locationResult){
                 super.onLocationResult(locationResult);
 
-                currentLocation = locationResult.getLastLocation();
-                Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() + ", " +
-                        currentLocation.getLongitude() + ")");
+                if(magnitude > 10){
+                    currentLocation = locationResult.getLastLocation();
+                    Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() + ", " +
+                            currentLocation.getLongitude() + ") with magnitude = " + magnitude);
+                    //Toast.makeText(getContext(), "Location updated", Toast.LENGTH_SHORT);
+                }
             }
         }, Looper.getMainLooper());
     }
