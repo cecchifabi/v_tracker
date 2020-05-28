@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">v_tracker</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -13,5 +14,5 @@
     <string name="menu_signout">Sign Out</string>
     <string name="menu_appinfo">Info on this App</string>
     <string name="notification_header">V-Tracker</string>
-    <string name="notification_content">Background access to the device location.</string>
+    <string name="notification_content">...</string>
 </resources>

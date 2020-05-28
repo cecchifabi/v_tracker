@@ -30,6 +30,7 @@ import com.v_tracker.ui.map.MapFragment;
 
 public class LocationForegroundService extends Service {
 
+    public final static double MAGNITUDE_THRESHOLD = 9.85;
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
 
     // Motion detection
@@ -60,7 +61,7 @@ public class LocationForegroundService extends Service {
         public void onLocationResult(LocationResult locationResult){
             super.onLocationResult(locationResult);
 
-            if(magnitude > MapFragment.MAGNITUDE_THRESHOLD){
+            if(magnitude > MAGNITUDE_THRESHOLD){
                 currentLocation = locationResult.getLastLocation();
                 Log.i(MapFragment.V_TRACKER_INFO, "New location (background): (" + currentLocation.getLatitude() + ", " +
                         currentLocation.getLongitude() + ") with magnitude = " + magnitude);
@@ -86,7 +87,7 @@ public class LocationForegroundService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Background location")
+                .setContentTitle(getResources().getString(R.string.notification_header))
                 .setContentText(input)
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentIntent(pendingIntent)
@@ -95,8 +96,8 @@ public class LocationForegroundService extends Service {
 
         // Prepare the location request to access the position from now on
         locationRequest = LocationRequest.create()
-                .setInterval(10000)
-                .setFastestInterval(1000)
+                .setInterval(1200000) // 10 min
+                .setFastestInterval(600000) // 5 min
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 

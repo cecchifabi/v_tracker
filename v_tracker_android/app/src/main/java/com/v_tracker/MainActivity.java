@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void startService() {
         Intent serviceIntent = new Intent(this, LocationForegroundService.class);
-        serviceIntent.putExtra("inputExtra", "V Tracker is getting the device location in background");
+        serviceIntent.putExtra("inputExtra", getResources().getString(R.string.notification_content));
         ContextCompat.startForegroundService(this, serviceIntent);
     }
 

@@ -66,9 +66,8 @@ import org.greenrobot.eventbus.EventBus;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
-    public final static double MAGNITUDE_THRESHOLD = 9.85;
 
-    // Map
+    // Member variables for the map
     private GoogleMap myMap;
     private MapView mapView;
     private View mView;
@@ -76,27 +75,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Circle userCircle;
     private float currentZoomLevel;
 
-    // Motion detection
-    TextView magnitudeText;
-    private float xCurr, yCurr, zCurr, magnitude;
-    private SensorManager sensorManager;
-    private Sensor sensor;
-    private SensorEventListener sensorEventListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            magnitude = (float) Math.sqrt(Math.pow(event.values[0], 2) + Math.pow(event.values[1], 2) + Math.pow(event.values[2], 2));
-            xCurr = event.values[0];
-            yCurr = event.values[1];
-            zCurr = event.values[2];
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-        }
-    };
-
-    // Location
+    // Member variables for the location
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
     private LocationRequest locationRequest;
@@ -104,27 +83,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onLocationResult(LocationResult locationResult){
             super.onLocationResult(locationResult);
-            magnitudeText.setText("Current magnitude: " + magnitude);
-            updateMapPosition();
 
-            if(magnitude > MAGNITUDE_THRESHOLD){
-                currentLocation = locationResult.getLastLocation();
-                Log.i(V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
-                        currentLocation.getLongitude() + ") with magnitude = " + magnitude);
-            }
+            currentLocation = locationResult.getLastLocation();
+            currentZoomLevel = myMap.getCameraPosition().zoom;
+            updateMapPosition(false);
+
+            Log.i(V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
+                    currentLocation.getLongitude() + ")");
         }
     };
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        // Initialize the graphical elements
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-
-        magnitudeText = mView.findViewById(R.id.magn);
         FloatingActionButton fab = mView.findViewById(R.id.fab);
+
+        // Set a clockListener on the FAB
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                // Check permissions
                 boolean coarseLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED;
                 boolean fineLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -137,7 +118,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
                 }
 
-
+                // Get the first location
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                             @Override
@@ -149,7 +130,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     // Logic to handle location object
                                     Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() +
                                             ", " + currentLocation.getLongitude() + ")");
-                                    updateMapPosition();
+                                    updateMapPosition(true);
                                 }
                                 else {
                                     Log.i(V_TRACKER_INFO, "currentLocation = null");
@@ -163,14 +144,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .setFastestInterval(1000)
                         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 requestLocationUpdates();
-
-                xCurr = 0;
-                yCurr = 0;
-                zCurr = 0;
-                magnitude = 0;
-                sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
-                sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-                sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL);
             }
         });
 
@@ -181,14 +154,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    public void updateMapPosition() {
-        CameraPosition newPos = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+    public void updateMapPosition(boolean moveTarget) {
+
+        if(moveTarget) {
+            CameraPosition newPos = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
                     .bearing(0)
                     .zoom(currentZoomLevel)
                     .tilt(0)
                     .build();
 
-        myMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPos));
+            myMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPos));
+        }
 
         if(userLocation != null) {
             userLocation.remove();
