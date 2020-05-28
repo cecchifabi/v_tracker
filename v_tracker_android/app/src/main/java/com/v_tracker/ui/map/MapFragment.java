@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,7 +65,8 @@ import org.greenrobot.eventbus.EventBus;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private final String V_TRACKER_INFO = "V_TRACKER_INFO";
+    public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
+    public final static double MAGNITUDE_THRESHOLD = 9.85;
 
     // Map
     private GoogleMap myMap;
@@ -74,12 +76,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Circle userCircle;
     private float currentZoomLevel;
 
-    // Location
-    private FusedLocationProviderClient fusedLocationClient;
-    private Location currentLocation;
-    private LocationRequest locationRequest;
-
     // Motion detection
+    TextView magnitudeText;
     private float xCurr, yCurr, zCurr, magnitude;
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -98,11 +96,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     };
 
+    // Location
+    private FusedLocationProviderClient fusedLocationClient;
+    private Location currentLocation;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult){
+            super.onLocationResult(locationResult);
+            magnitudeText.setText("Current magnitude: " + magnitude);
+            updateMapPosition();
+
+            if(magnitude > MAGNITUDE_THRESHOLD){
+                currentLocation = locationResult.getLastLocation();
+                Log.i(V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
+                        currentLocation.getLongitude() + ") with magnitude = " + magnitude);
+            }
+        }
+    };
+
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         mView = inflater.inflate(R.layout.fragment_map, container, false);
 
+        magnitudeText = mView.findViewById(R.id.magn);
         FloatingActionButton fab = mView.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,19 +178,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void requestLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult){
-                super.onLocationResult(locationResult);
-
-                if(magnitude > 10){
-                    currentLocation = locationResult.getLastLocation();
-                    Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() + ", " +
-                            currentLocation.getLongitude() + ") with magnitude = " + magnitude);
-                    //Toast.makeText(getContext(), "Location updated", Toast.LENGTH_SHORT);
-                }
-            }
-        }, Looper.getMainLooper());
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
     public void updateMapPosition() {
@@ -190,6 +196,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         userLocation = myMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user))
+                .rotation(currentLocation.getBearing())
         );
 
         if(userCircle != null) {
@@ -227,5 +234,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 new LatLng(0, 0)).zoom(3).bearing(0).tilt(90).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(initPos));
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.i(V_TRACKER_INFO, "Fragment paused");
+
+        // Stop getting the position in foreground (the background is going to start)
+        if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.i(V_TRACKER_INFO, "Fragment resumed");
+
+        // Start getting the position in foreground
+        if (fusedLocationClient != null) {
+            requestLocationUpdates();
+        }
     }
 }
