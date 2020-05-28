@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">v_tracker</string>
+    <string name="navigation_drawer_open">Apri il menu di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi il menu di navigazione</string>
+    <string name="nav_header_title">V-Tracker</string>
+    <string name="nav_header_subtitle">Fabio Cecchinato, Rui Silva, Tiago Feitor</string>
+    <string name="nav_header_desc">Menu di navigazione</string>
+
+    <string name="menu_map">V-Tracker</string>
+    <string name="menu_report">Segnala un\'infezione</string>
+    <string name="menu_COVID">COVID-19</string>
+    <string name="menu_userinfo">Informazioni sul tracking</string>
+    <string name="menu_signout">Esci</string>
+    <string name="menu_appinfo">Info su questa App</string>
+    <string name="notification_header">V-Tracker</string>
+    <string name="notification_content">Accesso alla posizione del dispositivo in background.</string>
+</resources>

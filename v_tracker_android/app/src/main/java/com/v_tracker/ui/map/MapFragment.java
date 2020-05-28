@@ -11,6 +11,12 @@ import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.TriggerEvent;
+import android.hardware.TriggerEventListener;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,6 +26,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +65,9 @@ import org.greenrobot.eventbus.EventBus;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
+
+    // Member variables for the map
     private GoogleMap myMap;
     private MapView mapView;
     private View mView;
@@ -64,27 +75,50 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Circle userCircle;
     private float currentZoomLevel;
 
+    // Member variables for the location
     private FusedLocationProviderClient fusedLocationClient;
     private Location currentLocation;
     private LocationRequest locationRequest;
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult){
+            super.onLocationResult(locationResult);
+
+            currentLocation = locationResult.getLastLocation();
+            currentZoomLevel = myMap.getCameraPosition().zoom;
+            updateMapPosition(false);
+
+            Log.i(V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
+                    currentLocation.getLongitude() + ")");
+        }
+    };
 
     public View onCreateView(@NonNull final LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        // Initialize the graphical elements
         mView = inflater.inflate(R.layout.fragment_map, container, false);
-
         FloatingActionButton fab = mView.findViewById(R.id.fab);
+
+        // Set a clockListener on the FAB
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (ContextCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                        ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // Check permissions
+                boolean coarseLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
+                boolean fineLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
+                boolean backgroundLocationDenied = ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED;
+
+                if (coarseLocationDenied || fineLocationDenied || backgroundLocationDenied) {
                     // Ask the user to allow location access
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
                 }
 
+                // Get the first location
                 fusedLocationClient.getLastLocation()
                         .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                             @Override
@@ -94,22 +128,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 if (currentLocation != null) {
                                     currentZoomLevel = 19;
                                     // Logic to handle location object
-                                    Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() +
+                                    Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() +
                                             ", " + currentLocation.getLongitude() + ")");
-                                    updateMapPosition();
-
-                                    // Prepare the location request to access the position from now on
-                                    locationRequest = LocationRequest.create()
-                                            .setInterval(10000)
-                                            .setFastestInterval(1000)
-                                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                                    requestLocationUpdates();
+                                    updateMapPosition(true);
                                 }
                                 else {
-                                    Log.i("V_TRACKER_INFO", "currentLocation = null");
+                                    Log.i(V_TRACKER_INFO, "currentLocation = null");
                                 }
                             }
                         });
+
+                // Prepare the location request to access the position from now on
+                locationRequest = LocationRequest.create()
+                        .setInterval(10000)
+                        .setFastestInterval(1000)
+                        .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                requestLocationUpdates();
             }
         });
 
@@ -117,26 +151,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void requestLocationUpdates() {
-        fusedLocationClient.requestLocationUpdates(locationRequest, new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult){
-                super.onLocationResult(locationResult);
-
-                currentLocation = locationResult.getLastLocation();
-                Log.i("V_TRACKER_INFO", "New location: (" + currentLocation.getLatitude() + ", " +
-                        currentLocation.getLongitude() + ")");
-            }
-        }, Looper.getMainLooper());
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-    public void updateMapPosition() {
-        CameraPosition newPos = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
+    public void updateMapPosition(boolean moveTarget) {
+
+        if(moveTarget) {
+            CameraPosition newPos = CameraPosition.builder().target(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
                     .bearing(0)
                     .zoom(currentZoomLevel)
                     .tilt(0)
                     .build();
 
-        myMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPos));
+            myMap.moveCamera(CameraUpdateFactory.newCameraPosition(newPos));
+        }
 
         if(userLocation != null) {
             userLocation.remove();
@@ -144,6 +172,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         userLocation = myMap.addMarker(new MarkerOptions()
                 .position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()))
                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_user))
+                .rotation(currentLocation.getBearing())
         );
 
         if(userCircle != null) {
@@ -181,5 +210,29 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 new LatLng(0, 0)).zoom(3).bearing(0).tilt(90).build();
         map.moveCamera(CameraUpdateFactory.newCameraPosition(initPos));
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.i(V_TRACKER_INFO, "Fragment paused");
+
+        // Stop getting the position in foreground (the background is going to start)
+        if (fusedLocationClient != null) {
+            fusedLocationClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.i(V_TRACKER_INFO, "Fragment resumed");
+
+        // Start getting the position in foreground
+        if (fusedLocationClient != null) {
+            requestLocationUpdates();
+        }
     }
 }

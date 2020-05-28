@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">v_tracker</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -12,13 +12,14 @@
     <string name="menu_userinfo">User Tracker Info</string>
     <string name="menu_signout">Sign Out</string>
     <string name="menu_appinfo">Info on this App</string>
-
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="firstName">First Name</string>
-    <string name="lastName">Last Name</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="no_login">Don\'t have an account? Register here</string>
-    <string name="no_register">Already have an account? Login here</string>
+    <string name="email" tools:ignore="MissingTranslation">Email</string>
+    <string name="password" tools:ignore="MissingTranslation">Password</string>
+    <string name="firstName" tools:ignore="MissingTranslation">First Name</string>
+    <string name="lastName" tools:ignore="MissingTranslation">Last Name</string>
+    <string name="login" tools:ignore="MissingTranslation">Login</string>
+    <string name="register" tools:ignore="MissingTranslation">Register</string>
+    <string name="no_login" tools:ignore="MissingTranslation">Don\'t have an account? Register here</string>
+    <string name="no_register" tools:ignore="MissingTranslation">Already have an account? Login here</string>
+    <string name="notification_header">V-Tracker</string>
+    <string name="notification_content">Background access to the device location.</string>
 </resources>

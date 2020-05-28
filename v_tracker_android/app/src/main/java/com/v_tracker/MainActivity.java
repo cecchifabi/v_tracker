@@ -64,19 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    /*@Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        Log.i("V_TRACKER_INFO", "Fragment destroyed: starting foreground service");
-        startService();
-    }*/
-
     @Override
     public void onStop() {
         super.onStop();
 
-        Log.i("V_TRACKER_INFO", "Fragment stopped: starting foreground service");
+        Log.i("V_TRACKER_INFO", "Activity stopped: starting foreground service");
         startService();
     }
 
@@ -84,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Log.i("V_TRACKER_INFO", "Fragment resumed: stopping foreground service");
+        Log.i("V_TRACKER_INFO", "Activity resumed: stopping foreground service");
         stopService();
     }
 
     public void startService() {
         Intent serviceIntent = new Intent(this, LocationForegroundService.class);
-        serviceIntent.putExtra("inputExtra", "V Tracker is getting the device location in background");
+        serviceIntent.putExtra("inputExtra", getResources().getString(R.string.notification_content));
         ContextCompat.startForegroundService(this, serviceIntent);
     }
 
