@@ -3,7 +3,9 @@ package com.v_tracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static boolean isLoggedIn = false;
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
     FirebaseAuth mFirebaseAuth;
     TextView text_email;
     TextView text_password;
@@ -24,6 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -51,6 +60,9 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                isLoggedIn = true;
+                                editor.putBoolean("IS_LOGGED", isLoggedIn);
+                                editor.commit();
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             else{

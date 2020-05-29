@@ -1,6 +1,8 @@
 package com.v_tracker;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import androidx.appcompat.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
 
     public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
+    SharedPreferences sharedPref;
 
     FirebaseAuth mFirebaseAuth;
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = this.getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         mFirebaseAuth = FirebaseAuth.getInstance();
         if (mFirebaseAuth.getCurrentUser() == null){
             startActivity(new Intent(MainActivity.this,LoginActivity.class));
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Log.i(V_TRACKER_INFO, "Activity stopped: starting foreground service");
+        Log.i(V_TRACKER_INFO, "MainActivity stopped: starting foreground service");
         startService();
     }
 
@@ -79,14 +83,16 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Log.i(V_TRACKER_INFO, "Activity resumed: stopping foreground service");
+        Log.i(V_TRACKER_INFO, "MainActivity resumed: stopping foreground service");
         stopService();
     }
 
     public void startService() {
-        Intent serviceIntent = new Intent(this, LocationForegroundService.class);
-        serviceIntent.putExtra("inputExtra", getResources().getString(R.string.notification_content));
-        ContextCompat.startForegroundService(this, serviceIntent);
+        if(sharedPref.getBoolean("IS_LOGGED", false)) {
+            Intent serviceIntent = new Intent(this, LocationForegroundService.class);
+            serviceIntent.putExtra("inputExtra", getResources().getString(R.string.notification_content));
+            ContextCompat.startForegroundService(this, serviceIntent);
+        }
     }
 
     public void stopService() {
