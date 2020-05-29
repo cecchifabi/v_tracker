@@ -36,14 +36,16 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = text_email.getText().toString();
                 String pwd = text_password.getText().toString();
                 if (email.isEmpty() && pwd.isEmpty()){
-                    Toast.makeText(RegisterActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this,
+                            getResources().getString(R.string.empty_fields),
+                            Toast.LENGTH_SHORT).show();
                 }
                 else if (email.isEmpty()){
-                    text_email.setError("Please enter email!");
+                    text_email.setError(getResources().getString(R.string.empty_email));
                     text_email.requestFocus();
                 }
                 else if (pwd.isEmpty()){
-                    text_password.setError("Please enter password!");
+                    text_password.setError(getResources().getString(R.string.empty_password));
                     text_password.requestFocus();
                 }
                 else {
@@ -54,7 +56,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             }
                             else{
-                                Toast.makeText(RegisterActivity.this, "Login Unsuccessful! Please check your credentials!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this,
+                                        getResources().getString(R.string.login_unsuccesful),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

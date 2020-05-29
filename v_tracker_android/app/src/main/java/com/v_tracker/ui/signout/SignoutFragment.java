@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.v_tracker.LoginActivity;
+import com.v_tracker.MainActivity;
 import com.v_tracker.R;
 
 public class SignoutFragment extends Fragment {
@@ -22,7 +23,7 @@ public class SignoutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        Log.i("Message", "I'm in SIGN OUT");
+        Log.i(MainActivity.V_TRACKER_INFO, "I'm in SIGN OUT");
         View root = inflater.inflate(R.layout.fragment_signout, container, false);
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getActivity(), LoginActivity.class));

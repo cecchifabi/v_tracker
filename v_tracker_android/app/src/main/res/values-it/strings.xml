@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Apri il menu di navigazione</string>
     <string name="navigation_drawer_close">Chiudi il menu di navigazione</string>
     <string name="nav_header_title">V-Tracker</string>
-    <string name="nav_header_subtitle">Fabio Cecchinato, Rui Silva, Tiago Feitor</string>
+    <string name="nav_header_subtitle">Fabio Cecchinato\nRui Silva\nTiago Feitor</string>
     <string name="nav_header_desc">Menu di navigazione</string>
 
     <string name="menu_map">V-Tracker</string>
@@ -13,6 +13,33 @@
     <string name="menu_userinfo">Informazioni sul tracking</string>
     <string name="menu_signout">Esci</string>
     <string name="menu_appinfo">Info su questa App</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="firstName">Nome</string>
+    <string name="lastName">Cognome</string>
+    <string name="login">Entra</string>
+    <string name="register">Registrati</string>
+    <string name="no_login">Non hai un account? Registrati qui</string>
+    <string name="no_register">Hai già un account? Clicca qui</string>
+
     <string name="notification_header">V-Tracker</string>
     <string name="notification_content">Accesso alla posizione del dispositivo in background.</string>
+
+    <string name="empty_fields">Dati non inseriti correttamente!</string>
+    <string name="empty_email">Inserire un\'email valida</string>
+    <string name="empty_password">Inserire una password valida</string>
+    <string name="login_unsuccesful">Login non riuscito! Controlla le credenziali</string>
+
+    <string name="appinfo_title0">App realizzata per il corso di Mobile Computing in</string>
+    <string name="appinfo_title1">Ingegneria Computazionale e Telematica,\nUniversità di Aveiro</string>
+    <string name="appinfo_title2">Studenti</string>
+    <string name="appinfo_students">Fabio Cecchinato, 100720\nRui Silva, 85135\nTiago Feitor, 85134</string>
+    <string name="appinfo_content">Questa applicazione ha accesso alla posizione degli utenti, salvandola in un
+        database remoto.\n
+        Se, ad un certo punto, ad un utente viene diagnosticato il COVID-19, questi può modificare il suo stato di salute
+        nell\'app tramite un appropriato codice QR, che nella nostra visione dovrebbe essere fornito dal medico al
+        momento della diagnosi. Allo stesso tempo, ogni utente ha la possibilità di vedere sulla mappa le posizioni
+        di altri utenti che sono stati marcati come infetti.\n
+        Il tutto viene gestito nell\'anonimato più assoluto.</string>
 </resources>

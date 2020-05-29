@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.v_tracker.MainActivity;
 import com.v_tracker.R;
 
 public class ReportFragment extends Fragment {
@@ -20,7 +21,7 @@ public class ReportFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        Log.i("Message", "I'm in REPORT");
+        Log.i(MainActivity.V_TRACKER_INFO, "I'm in REPORT");
         View root = inflater.inflate(R.layout.fragment_report, container, false);
         final TextView textView = root.findViewById(R.id.text_report);
         textView.setText("Report");

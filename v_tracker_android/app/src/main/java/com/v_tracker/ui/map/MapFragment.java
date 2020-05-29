@@ -65,8 +65,6 @@ import org.greenrobot.eventbus.EventBus;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
-
     // Member variables for the map
     private GoogleMap myMap;
     private MapView mapView;
@@ -88,7 +86,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             currentZoomLevel = myMap.getCameraPosition().zoom;
             updateMapPosition(false);
 
-            Log.i(V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
+            Log.i(MainActivity.V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
                     currentLocation.getLongitude() + ")");
         }
     };
@@ -128,12 +126,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 if (currentLocation != null) {
                                     currentZoomLevel = 19;
                                     // Logic to handle location object
-                                    Log.i(V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() +
+                                    Log.i(MainActivity.V_TRACKER_INFO, "New location: (" + currentLocation.getLatitude() +
                                             ", " + currentLocation.getLongitude() + ")");
                                     updateMapPosition(true);
                                 }
                                 else {
-                                    Log.i(V_TRACKER_INFO, "currentLocation = null");
+                                    Log.i(MainActivity.V_TRACKER_INFO, "currentLocation = null");
                                 }
                             }
                         });
@@ -216,7 +214,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onPause() {
         super.onPause();
 
-        Log.i(V_TRACKER_INFO, "Fragment paused");
+        Log.i(MainActivity.V_TRACKER_INFO, "Fragment paused");
 
         // Stop getting the position in foreground (the background is going to start)
         if (fusedLocationClient != null) {
@@ -228,7 +226,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
 
-        Log.i(V_TRACKER_INFO, "Fragment resumed");
+        Log.i(MainActivity.V_TRACKER_INFO, "Fragment resumed");
 
         // Start getting the position in foreground
         if (fusedLocationClient != null) {

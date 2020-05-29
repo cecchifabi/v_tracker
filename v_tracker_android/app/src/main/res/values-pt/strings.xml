@@ -4,7 +4,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">V-Tracker</string>
-    <string name="nav_header_subtitle">Fabio Cecchinato, Rui Silva, Tiago Feitor</string>
+    <string name="nav_header_subtitle">Fabio Cecchinato\nRui Silva\nTiago Feitor</string>
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_map">V-Tracker</string>
@@ -13,6 +13,31 @@
     <string name="menu_userinfo">User Tracker Info</string>
     <string name="menu_signout">Sign Out</string>
     <string name="menu_appinfo">Info on this App</string>
+
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="no_login">Don\'t have an account? Register here</string>
+    <string name="no_register">Already have an account? Login here</string>
+
     <string name="notification_header">V-Tracker</string>
     <string name="notification_content">...</string>
+
+    <string name="empty_fields">Fields are empty!</string>
+    <string name="empty_email">Please, enter a valid email</string>
+    <string name="empty_password">Please, enter a valid password</string>
+    <string name="login_unsuccesful">Login unsuccessful! Please check your credentials!</string>
+
+    <string name="appinfo_title0">App made for the Mobile Computing course in</string>
+    <string name="appinfo_title1">Computer and Telematics engineering,\nUniversity of Aveiro</string>
+    <string name="appinfo_title2">Students</string>
+    <string name="appinfo_students">Fabio Cecchinato, 100720\nRui Silva, 85135\nTiago Feitor, 85134</string>
+    <string name="appinfo_content">This app saves the locations where the user went, storing them in an online database.\n
+    If, at any point, the user gets infected by the COVID-19, he/she can change his/her health status using an appropriate
+        QR code, which in our vision can only be accessed from doctors. At the same time, any user can see on the map the
+        places where other infected users have been.\n
+        Everything is anonymous.</string>
 </resources>

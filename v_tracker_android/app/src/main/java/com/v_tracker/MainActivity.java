@@ -21,6 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
+
+    public final static String V_TRACKER_INFO = "V_TRACKER_INFO";
+
     FirebaseAuth mFirebaseAuth;
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -68,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
 
-        Log.i("V_TRACKER_INFO", "Activity stopped: starting foreground service");
+        Log.i(V_TRACKER_INFO, "Activity stopped: starting foreground service");
         startService();
     }
 
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Log.i("V_TRACKER_INFO", "Activity resumed: stopping foreground service");
+        Log.i(V_TRACKER_INFO, "Activity resumed: stopping foreground service");
         stopService();
     }
 

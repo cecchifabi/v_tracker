@@ -63,7 +63,7 @@ public class LocationForegroundService extends Service {
 
             if(magnitude > MAGNITUDE_THRESHOLD){
                 currentLocation = locationResult.getLastLocation();
-                Log.i(MapFragment.V_TRACKER_INFO, "New location (background): (" + currentLocation.getLatitude() + ", " +
+                Log.i(MainActivity.V_TRACKER_INFO, "New location (background): (" + currentLocation.getLatitude() + ", " +
                         currentLocation.getLongitude() + ") with magnitude = " + magnitude);
             }
         }
@@ -80,7 +80,7 @@ public class LocationForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("V_TRACKER_INFO", "Foreground service: working in background mode");
+        Log.i(MainActivity.V_TRACKER_INFO, "Foreground service: working in background mode");
         String input = intent.getStringExtra("inputExtra");
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -89,7 +89,7 @@ public class LocationForegroundService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getResources().getString(R.string.notification_header))
                 .setContentText(input)
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+                .setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pendingIntent)
                 .build();
         startForeground(1, notification);

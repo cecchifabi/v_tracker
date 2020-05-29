@@ -14,7 +14,7 @@
             android:title="@string/menu_report" />
         <item
             android:id="@+id/nav_covid"
-            android:icon="@drawable/ic_announcement_black_24dp"
+            android:icon="@drawable/ic_notification"
             android:title="@string/menu_COVID" />
         <item
             android:id="@+id/nav_userinfo"

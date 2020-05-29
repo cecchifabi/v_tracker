@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.v_tracker.MainActivity;
 import com.v_tracker.R;
 
 public class CovidFragment extends Fragment {
@@ -20,7 +21,7 @@ public class CovidFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        Log.i("Message", "I'm in COVID");
+        Log.i(MainActivity.V_TRACKER_INFO, "I'm in COVID");
         View root = inflater.inflate(R.layout.fragment_covid, container, false);
         final TextView textView = root.findViewById(R.id.text_covid);
         textView.setText("Covid");

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,14 +36,14 @@ public class LoginActivity extends AppCompatActivity {
                 String email = text_email.getText().toString();
                 String pwd = text_password.getText().toString();
                 if (email.isEmpty() && pwd.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Fields are empty!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.empty_fields), Toast.LENGTH_SHORT).show();
                 }
                 else if (email.isEmpty()){
-                    text_email.setError("Please enter email!");
+                    text_email.setError(getResources().getString(R.string.empty_email));
                     text_email.requestFocus();
                 }
                 else if (pwd.isEmpty()){
-                    text_password.setError("Please enter password!");
+                    text_password.setError(getResources().getString(R.string.empty_password));
                     text_password.requestFocus();
                 }
                 else {
@@ -53,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             else{
-                                Toast.makeText(LoginActivity.this, "Login Unsuccessful! Please check your credentials!",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this,
+                                        getResources().getString(R.string.login_unsuccesful),
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
