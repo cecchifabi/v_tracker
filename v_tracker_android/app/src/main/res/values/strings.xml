@@ -39,4 +39,7 @@
         QR code, which in our vision can only be accessed from doctors. At the same time, any user can see on the map the
         places where other infected users have been.\n
         Everything is anonymous.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

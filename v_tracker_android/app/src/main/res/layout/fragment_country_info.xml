@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_covid"
+    android:id="@+id/fragment_covid_info"
     android:background="@color/cardview_light_background"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/newRecovered"
+        android:id="@+id/newRecovered_info"
         android:layout_width="80dp"
         android:layout_height="36dp"
         android:layout_marginStart="28dp"
@@ -17,11 +17,11 @@
         android:gravity="center"
         android:textColor="#59ED5F"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/newDeaths"
-        app:layout_constraintTop_toBottomOf="@+id/textNewRecovered" />
+        app:layout_constraintStart_toEndOf="@+id/newDeaths_info"
+        app:layout_constraintTop_toBottomOf="@+id/textNewRecovered_info" />
 
     <TextView
-        android:id="@+id/newCases"
+        android:id="@+id/newCases_info"
         android:layout_width="74dp"
         android:layout_height="36dp"
         android:layout_marginStart="30dp"
@@ -30,10 +30,10 @@
         android:textColor="#7B000000"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textNewCases" />
+        app:layout_constraintTop_toBottomOf="@+id/textNewCases_info" />
 
     <TextView
-        android:id="@+id/newDeaths"
+        android:id="@+id/newDeaths_info"
         android:layout_width="79dp"
         android:layout_height="36dp"
         android:layout_marginStart="24dp"
@@ -41,11 +41,11 @@
         android:gravity="center"
         android:textColor="#C5000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/newCases"
-        app:layout_constraintTop_toBottomOf="@+id/textNewDeaths" />
+        app:layout_constraintStart_toEndOf="@+id/newCases_info"
+        app:layout_constraintTop_toBottomOf="@+id/textNewDeaths_info" />
 
     <TextView
-        android:id="@+id/textNewDeaths"
+        android:id="@+id/textNewDeaths_info"
         android:layout_width="77dp"
         android:layout_height="21dp"
         android:layout_marginStart="24dp"
@@ -53,11 +53,11 @@
         android:gravity="center"
         android:text="New Deaths"
         android:textColor="#020202"
-        app:layout_constraintStart_toEndOf="@+id/textNewCases"
-        app:layout_constraintTop_toBottomOf="@+id/recovered" />
+        app:layout_constraintStart_toEndOf="@+id/textNewCases_info"
+        app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
     <TextView
-        android:id="@+id/textNewCases"
+        android:id="@+id/textNewCases_info"
         android:layout_width="75dp"
         android:layout_height="21dp"
         android:layout_marginStart="30dp"
@@ -67,10 +67,10 @@
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recovered" />
+        app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
     <TextView
-        android:id="@+id/textNewRecovered"
+        android:id="@+id/textNewRecovered_info"
         android:layout_width="107dp"
         android:layout_height="21dp"
         android:layout_marginStart="24dp"
@@ -78,16 +78,16 @@
         android:gravity="center"
         android:text="New Recovered"
         android:textColor="#000000"
-        app:layout_constraintStart_toEndOf="@+id/textNewDeaths"
-        app:layout_constraintTop_toBottomOf="@+id/recovered" />
+        app:layout_constraintStart_toEndOf="@+id/textNewDeaths_info"
+        app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
     <TextView
-        android:id="@+id/covid"
-        android:layout_width="234dp"
-        android:layout_height="29dp"
+        android:id="@+id/country_name_info"
+        android:layout_width="336dp"
+        android:layout_height="47dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="COVID-19"
+        android:text=""
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -98,7 +98,7 @@
         app:layout_constraintVertical_bias="0.042" />
 
     <TextView
-        android:id="@+id/recovered"
+        android:id="@+id/recovered_info"
         android:layout_width="134dp"
         android:layout_height="36dp"
         android:layout_marginTop="8dp"
@@ -108,10 +108,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRecovered" />
+        app:layout_constraintTop_toBottomOf="@+id/textRecovered_info" />
 
     <TextView
-        android:id="@+id/deaths"
+        android:id="@+id/deaths_info"
         android:layout_width="134dp"
         android:layout_height="36dp"
         android:layout_marginTop="12dp"
@@ -121,10 +121,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDeaths" />
+        app:layout_constraintTop_toBottomOf="@+id/textDeaths_info" />
 
     <TextView
-        android:id="@+id/textTotalCases"
+        android:id="@+id/textTotalCases_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
@@ -137,7 +137,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/totalCases"
+        android:id="@+id/totalCases_info"
         android:layout_width="134dp"
         android:layout_height="34dp"
         android:layout_marginTop="12dp"
@@ -147,21 +147,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textTotalCases" />
+        app:layout_constraintTop_toBottomOf="@+id/textTotalCases_info" />
 
-    <Button
-        android:id="@+id/buttonViewByCountry"
-        android:layout_width="119dp"
-        android:layout_height="37dp"
-        android:gravity="center"
-        android:text="View by country"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/totalCases" />
+
 
     <TextView
-        android:id="@+id/textDeaths"
+        android:id="@+id/textDeaths_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
@@ -175,7 +166,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textRecovered"
+        android:id="@+id/textRecovered_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="288dp"
