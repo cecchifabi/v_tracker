@@ -24,6 +24,12 @@ public class UserinfoFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_userinfo, container, false);
         final TextView textView = root.findViewById(R.id.text_userinfo);
         textView.setText("User Tracker Info");
+
+        /*
+        for(int i =display.listOfPositions.length-1; i>=0 ;i--){
+            rdisplay.add(display.listOfPositions[i]);
+        }*/
+
         return root;
     }
 }

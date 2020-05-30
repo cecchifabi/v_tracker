@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.v_tracker.ui.Database.Database;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
 
+    Database db = new Database();
     FirebaseAuth mFirebaseAuth;
     TextView text_email;
     TextView text_password;
@@ -63,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
                                 isLoggedIn = true;
                                 editor.putBoolean("IS_LOGGED", isLoggedIn);
                                 editor.commit();
+                                /*
+                                Date currentTime = Calendar.getInstance().getTime();
+                                db.addNewPosition(new Position(currentTime.toString(),0,0));
+                                */
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             }
                             else{
