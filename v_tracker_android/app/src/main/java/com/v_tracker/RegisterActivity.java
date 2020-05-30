@@ -15,8 +15,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.v_tracker.ui.Database.Database;
+import com.v_tracker.ui.models.User;
+import com.v_tracker.ui.models.Position;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class RegisterActivity extends AppCompatActivity {
 
+    Database db = new Database();
     FirebaseAuth mFirebaseAuth;
     TextView text_email;
     TextView text_password;
@@ -44,8 +53,8 @@ public class RegisterActivity extends AppCompatActivity {
                     text_email.setError(getResources().getString(R.string.empty_email));
                     text_email.requestFocus();
                 }
-                else if (pwd.isEmpty()){
-                    text_password.setError(getResources().getString(R.string.empty_password));
+                else if (pwd.length() < 6){
+                    text_password.setError("Please enter a password with at least 6 characters!");
                     text_password.requestFocus();
                 }
                 else {
@@ -53,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                List<Position> list_tmp = new ArrayList<Position>();
+                                User tmp_user = new User(false, list_tmp);
+                                db.updateUser(tmp_user);
                                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             }
                             else{
