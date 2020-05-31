@@ -2,8 +2,12 @@ package com.v_tracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,12 +23,12 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.v_tracker.ui.Database.Database;
 
 import java.io.IOException;
 
 public class ScannedBarcodeActivity extends AppCompatActivity {
     SurfaceView surfaceView;
-    TextView txtBarcodeValue;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
@@ -38,7 +42,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
+
         surfaceView = findViewById(R.id.surfaceView);
     }
 
@@ -100,18 +104,36 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                 if(barcodes.size()>0){
                     if(barcodes.valueAt(0).displayValue.equals("HEALTHY")){
                         Log.d("TAG1","BARCODES VALUE: HEALTHY");
-                        txtBarcodeValue.setText("HEALTHY");
+
+                        Intent intent = new Intent(ScannedBarcodeActivity.this, MainActivity.class);
+                        intent.putExtra("changeStatus", 1);
+                        startActivity(intent);
 
                     }
                     else if(barcodes.valueAt(0).displayValue.equals("INFECTED")){
                         Log.d("TAG1","BARCODES VALUE: INFECTED");
-                        txtBarcodeValue.setText("INFECTED");
+                        /*  AlertDialog dialog ;
+                             dialog = new AlertDialog.Builder(getApplicationContext())
+                                .setTitle("Confirm your status change")
+                                .setMessage("You're setting your current status to INFECTED")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener()
+                                {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i)
+                                    {
+                                        Database db = new Database();
+                                        db.updateState(true);
+                                    }
+                                })
+                                .show();
+                        dialog.cancel();*/
+                        Intent intent = new Intent(ScannedBarcodeActivity.this, MainActivity.class);
+                        intent.putExtra("changeStatus", 2);
+                        startActivity(intent);
 
                     }
                 }
-                //Intent intent = new Intent(ScannedBarcodeActivity.this, MainActivity.class);
-                //intent.putExtra("id", barcodes.valueAt(0).displayValue);
-                //startActivity(intent);
+
             }
         });
     }
@@ -128,4 +150,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         super.onResume();
         initialiseDetectorsAndSources();
     }
+
+
+
 }
