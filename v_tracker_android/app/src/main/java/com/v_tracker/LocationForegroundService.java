@@ -26,12 +26,20 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.v_tracker.ui.Database.Database;
 import com.v_tracker.ui.map.MapFragment;
+import com.v_tracker.ui.models.Position;
+
+import java.util.Date;
 
 public class LocationForegroundService extends Service {
 
     public final static double MAGNITUDE_THRESHOLD = 9.85;
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
+
+    // Member variable for the database
+    Database db;
+    Position position;
 
     // Motion detection
     private float xCurr, yCurr, zCurr, magnitude;
@@ -63,8 +71,17 @@ public class LocationForegroundService extends Service {
 
             if(magnitude > MAGNITUDE_THRESHOLD){
                 currentLocation = locationResult.getLastLocation();
-                Log.i(MainActivity.V_TRACKER_INFO, "New location (background): (" + currentLocation.getLatitude() + ", " +
-                        currentLocation.getLongitude() + ") with magnitude = " + magnitude);
+                Log.i(MainActivity.V_TRACKER_INFO,
+                        "New location (background): (" +
+                                currentLocation.getLatitude() + ", " +
+                                currentLocation.getLongitude() +
+                                ") with magnitude = " + magnitude +
+                                " and timestamp = " + new Date(currentLocation.getTime()).toString());
+                position = new Position(new Date(
+                        currentLocation.getTime()).toString(),
+                        currentLocation.getLatitude(),
+                        currentLocation.getLongitude());
+                db.addNewPosition(position);
             }
         }
     };
@@ -81,6 +98,10 @@ public class LocationForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(MainActivity.V_TRACKER_INFO, "Foreground service: working in background mode");
+
+        // Initialize the database
+        db = new Database();
+
         String input = intent.getStringExtra("inputExtra");
         createNotificationChannel();
         Intent notificationIntent = new Intent(this, MainActivity.class);

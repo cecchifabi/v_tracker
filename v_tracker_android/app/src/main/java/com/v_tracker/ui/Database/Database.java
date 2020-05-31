@@ -11,6 +11,7 @@ import com.v_tracker.ui.models.User;
 import java.util.List;
 
 public class Database {
+    boolean isInfected;
     List<Position> list;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -39,5 +40,27 @@ public class Database {
             }
         });
         return list;
+    }
+
+    public boolean getState(){
+        db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                isInfected = user.getIsInfected();
+            }
+        });
+        return isInfected;
+    }
+
+    public void updateState(boolean isInfected){
+        db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+                user.setInfected(isInfected);
+                updateUser(user);
+            }
+        });
     }
 }

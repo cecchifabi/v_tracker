@@ -22,6 +22,7 @@ public class ReportFragment extends Fragment {
 
     Button changeStatus;
     public static String code_message;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 

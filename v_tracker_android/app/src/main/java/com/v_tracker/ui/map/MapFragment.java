@@ -60,10 +60,19 @@ import com.google.android.material.snackbar.Snackbar;
 import com.v_tracker.LocationForegroundService;
 import com.v_tracker.MainActivity;
 import com.v_tracker.R;
+import com.v_tracker.ui.Database.Database;
+import com.v_tracker.ui.models.Position;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class MapFragment extends Fragment implements OnMapReadyCallback {
+
+    // Member variable for the database
+    Database db;
+    Position position;
 
     // Member variables for the map
     private GoogleMap myMap;
@@ -86,8 +95,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             currentZoomLevel = myMap.getCameraPosition().zoom;
             updateMapPosition(false);
 
-            Log.i(MainActivity.V_TRACKER_INFO, "New location (foreground): (" + currentLocation.getLatitude() + ", " +
-                    currentLocation.getLongitude() + ")");
+            Log.i(MainActivity.V_TRACKER_INFO,
+                    "New location (foreground): (" +
+                            currentLocation.getLatitude() + ", " +
+                            currentLocation.getLongitude() +
+                            "), timestamp = " + new Date(currentLocation.getTime()).toString());
+
+            position = new Position(new Date(
+                    currentLocation.getTime()).toString(),
+                    currentLocation.getLatitude(),
+                    currentLocation.getLongitude());
+            db.addNewPosition(position);
         }
     };
 
@@ -97,6 +115,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Initialize the graphical elements
         mView = inflater.inflate(R.layout.fragment_map, container, false);
         FloatingActionButton fab = mView.findViewById(R.id.fab);
+
+        // Initialize the database
+        db = new Database();
 
         // Set a clockListener on the FAB
         fab.setOnClickListener(new View.OnClickListener() {
