@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mFirebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.activity_register);
         Button login_button = (Button) findViewById(R.id.login_button);
         text_email = (TextView) findViewById(R.id.inputEmail);
