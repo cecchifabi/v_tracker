@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sharedPref = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
+
         setContentView(R.layout.activity_login);
         mFirebaseAuth = FirebaseAuth.getInstance();
 
@@ -45,32 +46,28 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = text_email.getText().toString();
                 String pwd = text_password.getText().toString();
-                if (email.isEmpty() && pwd.isEmpty()){
+                if (email.isEmpty() && pwd.isEmpty()) {
                     Toast.makeText(LoginActivity.this, getResources().getString(R.string.empty_fields), Toast.LENGTH_SHORT).show();
-                }
-                else if (email.isEmpty()){
+                } else if (email.isEmpty()) {
                     text_email.setError(getResources().getString(R.string.empty_email));
                     text_email.requestFocus();
-                }
-                else if (pwd.isEmpty()){
+                } else if (pwd.isEmpty()) {
                     text_password.setError(getResources().getString(R.string.empty_password));
                     text_password.requestFocus();
-                }
-                else {
-                    mFirebaseAuth.signInWithEmailAndPassword(email,pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                } else {
+                    mFirebaseAuth.signInWithEmailAndPassword(email, pwd).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 isLoggedIn = true;
                                 editor.putBoolean("IS_LOGGED", isLoggedIn);
                                 editor.commit();
-                                /*
-                                Date currentTime = Calendar.getInstance().getTime();
-                                db.addNewPosition(new Position(currentTime.toString(),0,0));
-                                */
+                            /*
+                            Date currentTime = Calendar.getInstance().getTime();
+                            db.addNewPosition(new Position(currentTime.toString(),0,0));
+                            */
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(LoginActivity.this,
                                         getResources().getString(R.string.login_unsuccesful),
                                         Toast.LENGTH_SHORT).show();
@@ -90,3 +87,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 }
+

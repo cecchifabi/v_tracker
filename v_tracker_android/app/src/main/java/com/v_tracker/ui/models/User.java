@@ -12,6 +12,10 @@ public class User {
         listOfPositions = list;
     }
 
+    public void setInfected(boolean infected) {
+        isInfected = infected;
+    }
+
     public void addNewPosition(Position position){
         listOfPositions.add(position);
     }
@@ -20,7 +24,7 @@ public class User {
         return listOfPositions;
     }
 
-    public boolean isInfected() {
+    public boolean getIsInfected() {
         return isInfected;
     }
 }
