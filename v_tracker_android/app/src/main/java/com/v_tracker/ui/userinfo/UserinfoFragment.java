@@ -3,18 +3,38 @@ package com.v_tracker.ui.userinfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.v_tracker.MainActivity;
 import com.v_tracker.R;
+import com.v_tracker.ui.Database.Database;
+import com.v_tracker.ui.models.ListAdapter;
+import com.v_tracker.ui.models.Position;
+import com.v_tracker.ui.models.User;
+import com.v_tracker.ui.models.UserList;
+
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserinfoFragment extends Fragment {
+    List<Position> listOfPositions;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    RecyclerView mRecyclerView;
+    ListAdapter mAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -22,14 +42,39 @@ public class UserinfoFragment extends Fragment {
 
         Log.i(MainActivity.V_TRACKER_INFO, "I'm in USER TRACKER INFO");
         View root = inflater.inflate(R.layout.fragment_userinfo, container, false);
-        final TextView textView = root.findViewById(R.id.text_userinfo);
-        textView.setText("User Tracker Info");
 
-        /*
-        for(int i =display.listOfPositions.length-1; i>=0 ;i--){
-            rdisplay.add(display.listOfPositions[i]);
-        }*/
+        mRecyclerView = root.findViewById(R.id.recyclerViewList);
+        mAdapter = new ListAdapter(getContext(), getMyList());
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return root;
+    }
+
+    private ArrayList<UserList> getMyList() {
+        final ArrayList<UserList> list = new ArrayList<>();
+
+        db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                User user = documentSnapshot.toObject(User.class);
+                listOfPositions = user.getListOfPositions();
+
+                if (listOfPositions != null) {
+                    for (int i = listOfPositions.size() - 1; i >= 0; i--) {
+                        UserList m = new UserList();
+                        m.setLat(listOfPositions.get(i).getLatitude());
+                        m.setLon(listOfPositions.get(i).getLongitude());
+                        m.setTimestamp(listOfPositions.get(i).getTimestamp());
+                        m.setStreet("STREET NAME STRING");
+                        list.add(m);
+                    }
+                }
+                mAdapter.setModels(list);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+        });
+        return list;
     }
 }

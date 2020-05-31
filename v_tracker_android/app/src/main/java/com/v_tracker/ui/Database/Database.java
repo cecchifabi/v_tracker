@@ -7,12 +7,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.v_tracker.ui.models.Position;
 import com.v_tracker.ui.models.User;
+import com.v_tracker.ui.userinfo.UserinfoFragment;
+import android.os.ConditionVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+    ConditionVariable lock = new ConditionVariable();
     boolean isInfected;
-    List<Position> list;
+    static List<Position> list = new ArrayList<>();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -31,16 +35,23 @@ public class Database {
         });
     }
 
-    public List<Position> getListOfPositions(){
+    public List<Position> getListOfPositions() {
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                User user = documentSnapshot.toObject(User.class);
                list = user.getListOfPositions();
+               for (int i = 0; i < user.getListOfPositions().size(); i++){
+                   System.out.println("LATITUDE=" + user.getListOfPositions().get(i).getLatitude());
+                   System.out.println("LONGITUDE=" + user.getListOfPositions().get(i).getLongitude());
+                   System.out.println("TIMESTAMP=" + user.getListOfPositions().get(i).getTimestamp());
+               }
             }
         });
         return list;
     }
+
+
 
     public boolean getState(){
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
