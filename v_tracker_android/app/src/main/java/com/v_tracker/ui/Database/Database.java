@@ -7,14 +7,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.v_tracker.ui.models.Position;
 import com.v_tracker.ui.models.User;
-import com.v_tracker.ui.userinfo.UserinfoFragment;
-import android.os.ConditionVariable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    ConditionVariable lock = new ConditionVariable();
     boolean isInfected;
     static List<Position> list = new ArrayList<>();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -50,9 +47,7 @@ public class Database {
         });
         return list;
     }
-
-
-
+    
     public boolean getState(){
         db.collection("users").document(mAuth.getCurrentUser().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
