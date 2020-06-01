@@ -69,6 +69,8 @@ public class ReportFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        editor.putBoolean("IS_SCANNING_QR", false);
+        editor.commit();
         getState();
     }
     public boolean getState() {
