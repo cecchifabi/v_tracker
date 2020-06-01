@@ -12,46 +12,43 @@
         android:id="@+id/newRecovered_info"
         android:layout_width="80dp"
         android:layout_height="36dp"
-        android:layout_marginStart="28dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#59ED5F"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/newDeaths_info"
+        app:layout_constraintStart_toStartOf="@+id/textNewRecovered_info"
         app:layout_constraintTop_toBottomOf="@+id/textNewRecovered_info" />
 
     <TextView
         android:id="@+id/newCases_info"
         android:layout_width="74dp"
         android:layout_height="36dp"
-        android:layout_marginStart="30dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#7B000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textNewCases_info"
         app:layout_constraintTop_toBottomOf="@+id/textNewCases_info" />
 
     <TextView
         android:id="@+id/newDeaths_info"
         android:layout_width="79dp"
         android:layout_height="36dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#C5000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/newCases_info"
+        app:layout_constraintStart_toStartOf="@+id/textNewDeaths_info"
         app:layout_constraintTop_toBottomOf="@+id/textNewDeaths_info" />
 
     <TextView
         android:id="@+id/textNewDeaths_info"
         android:layout_width="77dp"
         android:layout_height="21dp"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="New Deaths"
+        android:text="@string/new_deaths"
         android:textColor="#020202"
         app:layout_constraintStart_toEndOf="@+id/textNewCases_info"
         app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
@@ -63,7 +60,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="New Cases"
+        android:text="@string/new_cases"
         android:textColor="#000000"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,12 +70,12 @@
         android:id="@+id/textNewRecovered_info"
         android:layout_width="107dp"
         android:layout_height="21dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="100dp"
+        android:layout_marginEnd="30dp"
         android:gravity="center"
-        android:text="New Recovered"
+        android:text="@string/new_recoveries"
         android:textColor="#000000"
-        app:layout_constraintStart_toEndOf="@+id/textNewDeaths_info"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
     <TextView
@@ -128,7 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="88dp"
-        android:text="Total Cases"
+        android:text="@string/total_cases"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -150,14 +147,13 @@
         app:layout_constraintTop_toBottomOf="@+id/textTotalCases_info" />
 
 
-
     <TextView
         android:id="@+id/textDeaths_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
         android:gravity="center"
-        android:text="Deaths"
+        android:text="@string/deaths"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -171,7 +167,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="288dp"
         android:gravity="center"
-        android:text="Recovered"
+        android:text="@string/recovered"
         android:textColor="#000000"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

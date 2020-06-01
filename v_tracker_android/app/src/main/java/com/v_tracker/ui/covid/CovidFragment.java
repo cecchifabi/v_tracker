@@ -72,7 +72,7 @@ public class CovidFragment extends Fragment {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
                 if(!response.isSuccessful()){
-                    covid.setText("API does not respond");
+                    covid.setText(getResources().getString(R.string.API_not_respond));
                 }
                 else{
                     ArrayList<Country> countries= response.body().getCountries();
@@ -110,7 +110,7 @@ public class CovidFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
-                covid.setText("API Failure");
+                covid.setText(getResources().getString(R.string.API_failure));
             }
         });
 

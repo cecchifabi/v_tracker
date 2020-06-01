@@ -7,8 +7,10 @@ import androidx.fragment.app.DialogFragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,10 +35,14 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPref = getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
         setContentView(R.layout.activity_q_r_code);
         initViews();
     }
@@ -101,7 +107,10 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                 //Log.d("aa",  "RECEIVE DETECTION");
 
 
-                if(barcodes.size()>0){
+                if(barcodes.size()>0) {
+                    editor.putBoolean("IS_SCANNING_QR", false);
+                    editor.commit();
+
                     if(barcodes.valueAt(0).displayValue.equals("HEALTHY")){
                         Log.d("TAG1","BARCODES VALUE: HEALTHY");
 

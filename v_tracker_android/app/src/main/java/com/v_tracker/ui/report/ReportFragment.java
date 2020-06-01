@@ -1,6 +1,8 @@
 package com.v_tracker.ui.report;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +36,9 @@ public class ReportFragment extends Fragment {
     boolean isInfected;
     public static String code_message;
 
+    SharedPreferences sharedPref;
+    SharedPreferences.Editor editor;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -46,11 +51,14 @@ public class ReportFragment extends Fragment {
         db = new Database();
         boolean state = db.getState();
 
-
+        sharedPref = getActivity().getSharedPreferences("PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
 
         changeStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editor.putBoolean("IS_SCANNING_QR", true);
+                editor.commit();
                 startActivity(new Intent(getActivity(), ScannedBarcodeActivity.class));
             }
         });
@@ -72,11 +80,11 @@ public class ReportFragment extends Fragment {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User user = documentSnapshot.toObject(User.class);
                 if(user.getIsInfected()) {
-                    txtStatus.setText("Your current status: INFECTED");
+                    txtStatus.setText(getResources().getString(R.string.infected));
                     imgVirus.setBackgroundColor(0xFFD14D4D);
                 }
                 if(!user.getIsInfected()){
-                    txtStatus.setText("Your current status: HEALTHY");
+                    txtStatus.setText(getResources().getString(R.string.healthy));
                     imgVirus.setBackgroundColor(0xC54DD14D);
                 }
                 isInfected = user.getIsInfected();

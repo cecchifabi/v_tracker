@@ -42,4 +42,31 @@
         momento della diagnosi. Allo stesso tempo, ogni utente ha la possibilità di vedere sulla mappa le posizioni
         di altri utenti che sono stati marcati come infetti.\n
         Il tutto viene gestito nell\'anonimato più assoluto.</string>
+
+    <string name="infected">Il tuo stato è: INFETTO</string>
+    <string name="healthy">Il tuo stato è: SANO</string>
+    <string name="text_intro_qr">Cambia il tuo stato di salute da sano a infetto o viceversa.
+        In caso tu sia infetto, gli altri utenti avranno modo di conoscere l\'ultimo luogo in cui
+        sei stato (si ricorda che il tutto avviene sempre in forma anonima).</string>
+    <string name="text_qr">Hai bisogno di un codice QR fornito dal tuo medico che certifichi il tuo
+        stato di salute corrente.</string>
+    <string name="text_qr_button">CAMBIA STATO</string>
+
+    <string name="API_not_respond">L\'API non risponde</string>
+    <string name="API_failure">Errore nell\'API</string>
+    <string name="total_cases">Casi totali</string>
+    <string name="view_by_country">Vedi per paese</string>
+    <string name="deaths">Morti</string>
+    <string name="recovered">Guariti</string>
+    <string name="new_cases">Nuovi casi</string>
+    <string name="new_deaths">Nuove morti</string>
+    <string name="new_recoveries">Nuovi guariti</string>
+
+    <string name="alert_message_healthy">Stai cambiando il tuo stato corrente in SANO</string>
+    <string name="alert_message_title">Attenzione!</string>
+    <string name="alert_message_ok">Ok</string>
+    <string name="alert_message_cancel">Annulla</string>
+    <string name="alert_message_infected">Stai cambiando il tuo stato corrente in INFETTO</string>
+
+    <string name="change_status">Cambia il tuo stato</string>
 </resources>

@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
         //HEALTHY
         if(changeStatus==1) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("You're setting your current status to HEALTHY");
-            builder.setTitle("Alert!");
+            builder.setMessage(getResources().getString(R.string.alert_message_healthy));
+            builder.setTitle(getResources().getString(R.string.alert_message_title));
             builder.setCancelable(false);
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getResources().getString(R.string.alert_message_ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     dialog.cancel();
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getResources().getString(R.string.alert_message_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -107,10 +107,10 @@ public class MainActivity extends AppCompatActivity {
         //INFECTED
         if(changeStatus==2) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setMessage("You're setting your current status to INFECTED");
-            builder.setTitle("Alert!");
+            builder.setMessage(getResources().getString(R.string.alert_message_infected));
+            builder.setTitle(getResources().getString(R.string.alert_message_title));
             builder.setCancelable(false);
-            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton(getResources().getString(R.string.alert_message_ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(getResources().getString(R.string.alert_message_cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startService() {
-        if(sharedPref.getBoolean("IS_LOGGED", false)) {
+        if(sharedPref.getBoolean("IS_LOGGED", false) && !sharedPref.getBoolean("IS_SCANNING_QR", false)) {
             Intent serviceIntent = new Intent(this, LocationForegroundService.class);
             serviceIntent.putExtra("inputExtra", getResources().getString(R.string.notification_content));
             ContextCompat.startForegroundService(this, serviceIntent);
