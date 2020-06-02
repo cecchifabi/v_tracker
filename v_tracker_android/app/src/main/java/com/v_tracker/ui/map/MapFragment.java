@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -53,26 +55,42 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.v_tracker.LocationForegroundService;
 import com.v_tracker.MainActivity;
 import com.v_tracker.R;
 import com.v_tracker.ui.Database.Database;
 import com.v_tracker.ui.models.Position;
+import com.v_tracker.ui.models.User;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     // Member variable for the database
     Database db;
     Position position;
+    FirebaseAuth mAuth;
+    FirebaseFirestore fdb;
 
     // Member variables for the map
     private GoogleMap myMap;
@@ -204,6 +222,67 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .strokeColor(0x50FFFFFF)
                 .strokeWidth(1)
         );
+        mAuth = FirebaseAuth.getInstance();fdb = FirebaseFirestore.getInstance();
+        ArrayList<User> listOfUsers = new ArrayList<>();
+        fdb.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        User user = document.toObject(User.class);
+                        listOfUsers.add(user);
+                        //Log.d("USER ID", "USER ID= " + user.getUid());
+                    }
+                    try {
+                        showInfected(listOfUsers, currentLocation.getLatitude(), currentLocation.getLongitude());
+                    } catch (ParseException e) {
+                        Log.d("USERTIME", "PARSE DATE ERROR");
+                    }
+                }
+            }
+        });
+    }
+
+    private void showInfected(ArrayList<User> userList,double userLatitude, double userLongitude) throws ParseException {
+        //if other user is infected in the last 4 days show his last known position
+        for(User user: userList){
+            if(!user.getUid().equals(mAuth.getCurrentUser().getUid()) ){
+                if(user.getIsInfected()){
+                    //resize icon
+                    int height = 150;
+                    int width = 150;
+                    BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.infected);
+                    Bitmap b = bitmapdraw.getBitmap();
+                    Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+
+                    int LIndex = user.getListOfPositions().size();// last location index
+
+
+                    //Example date from DB: Tue Jun 02 18:49:15 GMT+01:00 2020
+                    String[] split =  user.getListOfPositions().get(LIndex-1).getTimestamp().split(" ");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+                    Date d = formatter.parse( split[2]+ " " + split[1] + " " + split[5]);
+                    Date current_date = new Date();
+                    //date difference in msec
+                    long diff = current_date.getTime() - d.getTime();
+                    //date differnece in days
+                    long days = diff / (24 * 60 * 60 * 1000);
+                    Log.d("USERTIME",""+ days);
+                    //check if that infected user last location was less than 4 days ago
+                    if(days < 4) {
+                        //get his position and show on the map as a marker
+                        Position LPosition = user.getListOfPositions().get(LIndex - 1);
+                        userLocation = myMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(LPosition.getLatitude(), LPosition.getLongitude()))
+                                .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+
+                        );
+                    }
+                }
+            }
+        }
+
     }
 
     @Override

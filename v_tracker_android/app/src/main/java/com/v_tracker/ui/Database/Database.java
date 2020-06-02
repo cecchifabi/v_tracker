@@ -1,5 +1,6 @@
 package com.v_tracker.ui.Database;
 
+import android.icu.text.Transliterator;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
