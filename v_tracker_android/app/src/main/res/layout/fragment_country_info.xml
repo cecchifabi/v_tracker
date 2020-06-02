@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_covid_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_covid_info"
     android:background="@color/cardview_light_background"
     tools:context=".MainActivity">
 
@@ -12,44 +12,55 @@
         android:id="@+id/newRecovered_info"
         android:layout_width="80dp"
         android:layout_height="36dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#59ED5F"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewRecovered_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newDeaths_info"
         app:layout_constraintTop_toBottomOf="@+id/textNewRecovered_info" />
 
     <TextView
         android:id="@+id/newCases_info"
         android:layout_width="74dp"
         android:layout_height="36dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#7B000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewCases_info"
+        app:layout_constraintEnd_toStartOf="@+id/newDeaths_info"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNewCases_info" />
 
     <TextView
         android:id="@+id/newDeaths_info"
         android:layout_width="79dp"
         android:layout_height="36dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:gravity="center"
         android:textColor="#C5000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewDeaths_info"
+        app:layout_constraintEnd_toStartOf="@+id/newRecovered_info"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newCases_info"
         app:layout_constraintTop_toBottomOf="@+id/textNewDeaths_info" />
 
     <TextView
         android:id="@+id/textNewDeaths_info"
         android:layout_width="77dp"
         android:layout_height="21dp"
-        android:layout_marginStart="48dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="@string/new_deaths"
         android:textColor="#020202"
+        app:layout_constraintEnd_toStartOf="@+id/textNewRecovered_info"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textNewCases_info"
         app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
@@ -63,6 +74,8 @@
         android:text="@string/new_cases"
         android:textColor="#000000"
         android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/textNewDeaths_info"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
@@ -70,12 +83,14 @@
         android:id="@+id/textNewRecovered_info"
         android:layout_width="107dp"
         android:layout_height="21dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="100dp"
-        android:layout_marginEnd="30dp"
         android:gravity="center"
         android:text="@string/new_recoveries"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textNewDeaths_info"
         app:layout_constraintTop_toBottomOf="@+id/recovered_info" />
 
     <TextView

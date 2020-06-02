@@ -1,5 +1,7 @@
 package com.v_tracker.ui.userinfo;
 
+
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,9 @@ import com.v_tracker.ui.models.UserList;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.bitm.NominatimReverseGeocoding.Address;
+import eu.bitm.NominatimReverseGeocoding.NominatimReverseGeocodingJAPI;
 
 public class UserinfoFragment extends Fragment {
     List<Position> listOfPositions;
@@ -67,14 +72,26 @@ public class UserinfoFragment extends Fragment {
                         m.setLat(listOfPositions.get(i).getLatitude());
                         m.setLon(listOfPositions.get(i).getLongitude());
                         m.setTimestamp(listOfPositions.get(i).getTimestamp());
-                        m.setStreet("STREET NAME STRING");
+                        if(i > listOfPositions.size() - 10 )
+                            m.setStreet(getStreetName(listOfPositions.get(i).getLatitude(), listOfPositions.get(i).getLongitude()));
+
+                        else m.setStreet("");
                         list.add(m);
                     }
                 }
+
+
                 mAdapter.setModels(list);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
         return list;
+    }
+
+    public String getStreetName(double lat, double lon){
+        NominatimReverseGeocodingJAPI nominatim1 = new NominatimReverseGeocodingJAPI(); //create instance with default zoom level (18)
+        Address a = nominatim1.getAdress(lat, lon);
+        return a.getRoad();
+
     }
 }
