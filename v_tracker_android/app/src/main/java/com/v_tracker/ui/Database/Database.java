@@ -1,10 +1,18 @@
 package com.v_tracker.ui.Database;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.v_tracker.ui.models.Position;
 import com.v_tracker.ui.models.User;
 
@@ -46,6 +54,23 @@ public class Database {
             }
         });
         return list;
+    }
+
+    public void getAllUsers(){
+        List<User> listOfUsers = new ArrayList<>();
+        db.collection("users").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        User user = document.toObject(User.class);
+                        listOfUsers.add(user);
+                        Log.d("USER ID", "USER ID= " + user.getUid());
+                    }
+                }
+            }
+        });
+
     }
     
     public boolean getState(){

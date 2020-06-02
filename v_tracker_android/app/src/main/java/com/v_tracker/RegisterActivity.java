@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 editor.putBoolean("IS_LOGGED", true);
                                 editor.commit();
                                 List<Position> list_tmp = new ArrayList<Position>();
-                                User tmp_user = new User(false, list_tmp);
+                                User tmp_user = new User(false, list_tmp, mFirebaseAuth.getCurrentUser().getUid());
                                 db.updateUser(tmp_user);
                                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             } else {
