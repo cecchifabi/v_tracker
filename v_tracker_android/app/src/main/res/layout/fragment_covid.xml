@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_covid"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/fragment_covid"
     android:background="@color/cardview_light_background"
     tools:context=".MainActivity">
 
@@ -16,7 +16,9 @@
         android:gravity="center"
         android:textColor="#59ED5F"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewRecovered"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newDeaths"
         app:layout_constraintTop_toBottomOf="@+id/textNewRecovered" />
 
     <TextView
@@ -27,7 +29,9 @@
         android:gravity="center"
         android:textColor="#7B000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewCases"
+        app:layout_constraintEnd_toStartOf="@+id/newDeaths"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textNewCases" />
 
     <TextView
@@ -38,18 +42,21 @@
         android:gravity="center"
         android:textColor="#C5000000"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/textNewDeaths"
+        app:layout_constraintEnd_toStartOf="@+id/newRecovered"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/newCases"
         app:layout_constraintTop_toBottomOf="@+id/textNewDeaths" />
 
     <TextView
         android:id="@+id/textNewDeaths"
         android:layout_width="77dp"
         android:layout_height="21dp"
-        android:layout_marginStart="48dp"
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="@string/new_deaths"
         android:textColor="#020202"
+        app:layout_constraintEnd_toStartOf="@+id/textNewRecovered"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textNewCases"
         app:layout_constraintTop_toBottomOf="@+id/recovered" />
 
@@ -63,6 +70,8 @@
         android:text="@string/new_cases"
         android:textColor="#000000"
         android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/textNewDeaths"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recovered" />
 
@@ -76,6 +85,8 @@
         android:text="@string/new_recoveries"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textNewDeaths"
         app:layout_constraintTop_toBottomOf="@+id/recovered" />
 
     <TextView
