@@ -177,8 +177,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 // Prepare the location request to access the position from now on
                 locationRequest = LocationRequest.create()
-                        .setInterval(10000)
-                        .setFastestInterval(1000)
+                        .setInterval(100000)
+                        .setFastestInterval(30000)
                         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 requestLocationUpdates();
             }
