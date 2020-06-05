@@ -10,22 +10,17 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.v_tracker.MainActivity;
 import com.v_tracker.R;
+import com.v_tracker.ui.covid.api_models.Country;
+import com.v_tracker.ui.covid.api_models.JsonPlaceHolderAPI;
+import com.v_tracker.ui.covid.api_models.Post;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;

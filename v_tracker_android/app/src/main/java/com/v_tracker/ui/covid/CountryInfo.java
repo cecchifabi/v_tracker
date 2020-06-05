@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.v_tracker.R;
+import com.v_tracker.ui.covid.api_models.Country;
 
 /**
  * A simple {@link Fragment} subclass.

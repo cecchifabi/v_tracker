@@ -1,66 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">v_tracker</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Abrir o menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar o menu de navegação</string>
     <string name="nav_header_title">V-Tracker</string>
     <string name="nav_header_subtitle">Fabio Cecchinato\nRui Silva\nTiago Feitor</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_desc">Menu de navegação</string>
 
     <string name="menu_map">V-Tracker</string>
-    <string name="menu_report">Report an infection</string>
+    <string name="menu_report">Reportar uma infeção</string>
     <string name="menu_COVID">COVID-19</string>
-    <string name="menu_userinfo">User Tracker Info</string>
-    <string name="menu_signout">Sign Out</string>
-    <string name="menu_appinfo">Info on this App</string>
+    <string name="menu_userinfo">Informação do seu tracking</string>
+    <string name="menu_signout">Sair</string>
+    <string name="menu_appinfo">Informação sobre a App</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="firstName">First Name</string>
-    <string name="lastName">Last Name</string>
+    <string name="firstName">Primeiro Nome</string>
+    <string name="lastName">Apelido</string>
     <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="no_login">Don\'t have an account? Register here</string>
-    <string name="no_register">Already have an account? Login here</string>
+    <string name="register">Criar conta</string>
+    <string name="no_login">Não tem conta? Crie uma aqui</string>
+    <string name="no_register">Já tem conta? Clique aqui</string>
 
     <string name="notification_header">V-Tracker</string>
     <string name="notification_content">...</string>
 
-    <string name="empty_fields">Fields are empty!</string>
-    <string name="empty_email">Please, enter a valid email</string>
-    <string name="empty_password">Please, enter a valid password</string>
-    <string name="login_unsuccesful">Login unsuccessful! Please check your credentials!</string>
+    <string name="empty_fields">Campos estão vazios!</string>
+    <string name="empty_email">Insira um email válido</string>
+    <string name="empty_password">Insira uma password válida</string>
+    <string name="login_unsuccesful">Login falhou! Por favor confira login/password!</string>
 
-    <string name="appinfo_title0">App made for the Mobile Computing course in</string>
-    <string name="appinfo_title1">Computer and Telematics engineering,\nUniversity of Aveiro</string>
-    <string name="appinfo_title2">Students</string>
+    <string name="appinfo_title0">App feita para a cadeira de Computação Móvel em</string>
+    <string name="appinfo_title1">Engenharia de Computadores e Telemática,\nUniversidade de Aveiro</string>
+    <string name="appinfo_title2">Alunos</string>
     <string name="appinfo_students">Fabio Cecchinato, 100720\nRui Silva, 85135\nTiago Feitor, 85134</string>
-    <string name="appinfo_content">This app saves the locations where the user went, storing them in an online database.\n
-    If, at any point, the user gets infected by the COVID-19, he/she can change his/her health status using an appropriate
-        QR code, which in our vision can only be accessed from doctors. At the same time, any user can see on the map the
-        places where other infected users have been.\n
-        Everything is anonymous.</string>
+    <string name="appinfo_content">Esta app guarda as localizações que o utilizador percorre, armazenando-as numa base de dados online.\n
+    Se, o utilizador for infetado pelo COVID-19, tem de mudar o seu estado de saudável para infetado usando um código QR adequado, que só pode ser obtido
+        de médicos. O utilizador também pode observar as últimas localizações conhecidas de outros utilizadores infetados no mapa para ter cuidado com os sítios por onde passa.\n
+        Tudo é feito em anonimato.</string>
 
-    <string name="infected">Your current status: INFECTED</string>
-    <string name="healthy">Your current status: HEALTHY</string>
-    <string name="text_intro_qr">Change your status from healthy to infected or vice versa, so the other users can be aware of your previous locations.</string>
-    <string name="text_qr">You need a QR code from your medical report assuring your current status.</string>
-    <string name="text_qr_button">CHANGE STATUS</string>
+    <string name="infected">O seu estado atual: INFETADO</string>
+    <string name="healthy">O seu estado atual: SAUDÁVEL</string>
+    <string name="text_intro_qr">Mude o seu estado de infetado para saudável ou vice-versa, para que os outros utilizadores possam estar cientes da sua última localização conhecida</string>
+    <string name="text_qr">É necessário um código QR do seu relatório médico para mudar o seu estado</string>
+    <string name="text_qr_button">MUDAR ESTADO</string>
 
-    <string name="API_not_respond">API does not respond</string>
-    <string name="API_failure">API Failure</string>
-    <string name="total_cases">Total Cases</string>
-    <string name="view_by_country">View by country</string>
-    <string name="deaths">Deaths</string>
-    <string name="recovered">Recovered</string>
-    <string name="new_cases">New Cases</string>
-    <string name="new_deaths">New Deaths</string>
-    <string name="new_recoveries">New Recovered</string>
+    <string name="API_not_respond">API não responde</string>
+    <string name="API_failure">API Falhou</string>
+    <string name="total_cases">Casos totais</string>
+    <string name="view_by_country">Visualizar por país</string>
+    <string name="deaths">Mortes</string>
+    <string name="recovered">Recuperados</string>
+    <string name="new_cases">Casos recentes</string>
+    <string name="new_deaths">Mortes recentes</string>
+    <string name="new_recoveries">Recuperados recentes</string>
 
-    <string name="alert_message_healthy">You\'re setting your current status to HEALTHY</string>
-    <string name="alert_message_title">Alert!</string>
+    <string name="alert_message_healthy">Está a mudar o seu estado para SAUDÁVEL</string>
+    <string name="alert_message_title">Atenção!</string>
     <string name="alert_message_ok">Ok</string>
-    <string name="alert_message_cancel">Cancel</string>
-    <string name="alert_message_infected">You\'re setting your current status to INFECTED</string>
-    <string name="change_status">Change status</string>
+    <string name="alert_message_cancel">Cancelar</string>
+    <string name="alert_message_infected">Está a mudar o seu estado para INFETADO</string>
+    <string name="change_status">MUDAR ESTADO</string>
 </resources>

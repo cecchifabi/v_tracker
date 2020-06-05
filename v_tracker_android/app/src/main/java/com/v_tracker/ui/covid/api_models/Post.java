@@ -1,4 +1,4 @@
-package com.v_tracker.ui.covid;
+package com.v_tracker.ui.covid.api_models;
 
 import java.util.ArrayList;
 
@@ -8,11 +8,11 @@ public class Post {
     private ArrayList<Country> Countries;
     private String Date;
 
-    public  com.v_tracker.ui.covid.Global getGlobal() {
+    public com.v_tracker.ui.covid.api_models.Global getGlobal() {
         return Global;
     }
 
-    public void setGlobal(com.v_tracker.ui.covid.Global global) {
+    public void setGlobal(com.v_tracker.ui.covid.api_models.Global global) {
         Global = global;
     }
 
@@ -32,7 +32,7 @@ public class Post {
         Date = date;
     }
 
-    public Post(com.v_tracker.ui.covid.Global global, ArrayList<Country> countries, String date) {
+    public Post(com.v_tracker.ui.covid.api_models.Global global, ArrayList<Country> countries, String date) {
         Global = global;
         Countries = countries;
         Date = date;

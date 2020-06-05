@@ -1,4 +1,4 @@
-package com.v_tracker.ui.covid;
+package com.v_tracker.ui.covid.api_models;
 
 public class Country{
     private String Country;
