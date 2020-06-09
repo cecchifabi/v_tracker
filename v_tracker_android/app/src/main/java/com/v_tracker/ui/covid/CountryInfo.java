@@ -14,14 +14,9 @@ import android.widget.TextView;
 import com.v_tracker.R;
 import com.v_tracker.ui.covid.api_models.Country;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CountryInfo#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class CountryInfo extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    
     public Country country;
     TextView country_name, totalCases, totalRecovered, totalDeaths, newCases, newRecovered, newDeaths;
 
@@ -39,7 +34,6 @@ public class CountryInfo extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static CountryInfo newInstance(String param1, String param2) {
         CountryInfo fragment = new CountryInfo();
         Bundle args = new Bundle();
@@ -60,9 +54,6 @@ public class CountryInfo extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_country_info, container, false);
         return inflater.inflate(R.layout.fragment_country_info, container, false);
-
-
-
 
     }
 
