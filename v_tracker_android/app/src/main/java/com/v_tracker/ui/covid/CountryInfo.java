@@ -69,22 +69,7 @@ public class CountryInfo extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-       /* totalCases= root.findViewById(R.id.totalCases_info);
-        totalDeaths=root.findViewById(R.id.deaths_info);
-        totalRecovered=root.findViewById(R.id.recovered_info);
-        newCases=root.findViewById(R.id.newCases_info);
-        newDeaths=root.findViewById(R.id.newDeaths_info);
-        newRecovered=root.findViewById(R.id.newRecovered_info);
-        country_name = root.findViewById(R.id.country_name_info);
-
-        newCases.setText(""+country.getNewConfirmed());
-        newDeaths.setText(""+country.getNewDeaths());
-        newRecovered.setText(""+country.getNewRecovered());
-
-        totalCases.setText(""+country.getTotalConfirmed());
-        totalDeaths.setText(""+country.getTotalDeaths());
-        totalRecovered.setText(""+country.getTotalRecovered());
-        country_name.setText(country.getCountry());*/
+    
         totalCases= view.findViewById(R.id.totalCases_info);
         totalDeaths=view.findViewById(R.id.deaths_info);
         totalRecovered=view.findViewById(R.id.recovered_info);
